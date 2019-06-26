@@ -85,6 +85,11 @@ This action removes file from S3 by provided name in selected bucket. The action
 ### Stream to CSV
 Action is deprecated. Use `Write file` action instead.
 
+### Limitations
+
+1. Maximal possible size for attachment is 10 Mb.
+2. Attachments mechanism does NOT work with  [Local Agent Installation](https://support.elastic.io/support/solutions/articles/14000076461-announcing-the-local-agent-)
+
 ## License
 
 Apache-2.0 © [elastic.io GmbH](http://elastic.io)
