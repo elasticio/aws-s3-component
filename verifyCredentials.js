@@ -16,7 +16,7 @@ module.exports = function verifyCredentials(credentials, cb) {
     const s3 = new aws.S3({
       accessKeyId: credentials.accessKeyId,
       secretAccessKey: credentials.accessKeySecret,
-      region: 'us-east-1'
+      region: credentials.region
     });
 
     // eslint-disable-next-line no-use-before-define
