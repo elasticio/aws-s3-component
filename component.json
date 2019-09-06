@@ -13,6 +13,11 @@
         "label": "Secret Access Key",
         "required": true,
         "viewClass": "TextFieldView"
+      },
+      "region": {
+        "label": "Region",
+        "required": true,
+        "viewClass": "TextFieldView"
       }
     }
   },
