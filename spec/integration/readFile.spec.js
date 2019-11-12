@@ -10,7 +10,7 @@ const { expect } = chai;
 const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
-  bucketName: 'lloyds-dev/csv',
+  bucketName: 'lloyds-dev/test',
 };
 
 const defaultMsg = {};
@@ -59,13 +59,13 @@ describe('readFile', () => {
     nock('http://api.io/', { encodedQueryParams: true })
       .put('/some').reply(200, { signedUrl: { put_url: 'http://api.io/some' } });
 
-    msg.body = { filename: 'csv/result.csv' };
+    msg.body = { filename: 'result.csv' };
 
     await readFile.process.call(self, msg, cfg, {});
     const result = self.emit.getCall(0).args[1];
 
     const expectedAttachment = {
-      'csv/result.csv': {
+      'test/result.csv': {
         url: 'http://api.io/some',
         size: 22,
         'content-type': 'text/csv',

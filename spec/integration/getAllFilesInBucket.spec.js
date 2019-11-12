@@ -33,9 +33,9 @@ describe('getAllFilesInBucket', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it('should get files', async () => {
+  it('should get test.xml from bucket', async () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
-    const result = self.emit.getCalls();
-    expect(result.length).to.equal(103);
+    const files = self.emit.getCalls().map(call => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    expect(files).to.include('inbound/test.xml');
   });
 });
