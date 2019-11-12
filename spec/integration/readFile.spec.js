@@ -1,44 +1,39 @@
-/* eslint-disable global-require,no-unused-vars,func-names */
-
-const fs = require('fs');
+/* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
 const nock = require('nock');
+const readFile = require('../../lib/actions/readFile');
+require('dotenv').config();
 
 const { expect } = chai;
 
-const readFile = require('../../lib/actions/readFile');
+const defaultCfg = {
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  bucketName: 'lloyds-dev/csv',
+};
 
-describe('Read file', function () {
-  this.timeout(50000);
-  let configuration;
-  let emitter;
+const defaultMsg = {};
+
+const self = {
+  emit: sinon.spy(),
+};
+
+describe('readFile', () => {
+  let cfg;
   let msg;
 
-  before(async () => {
-    if (fs.existsSync('.env')) {
-      require('dotenv').config();
-    }
-
-    configuration = {
-      accessKeyId: process.env.ACCESS_KEY_ID,
-      accessKeySecret: process.env.ACCESS_KEY_SECRET,
-      bucketName: 'lloyds-dev/csv',
-    };
-  });
-
   beforeEach(() => {
-    emitter = {
-      emit: sinon.spy(),
-    };
-
-    msg = {};
+    cfg = JSON.parse(JSON.stringify(defaultCfg));
+    msg = JSON.parse(JSON.stringify(defaultMsg));
   });
 
-  it('reading xml', async () => {
+  afterEach(() => self.emit.resetHistory());
+
+  it('should read XML', async () => {
     msg.body = { filename: 'LU0326731121.xml' };
-    await readFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
+    await readFile.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
     const expectedDeclaration = {
       attributes: {
         encoding: 'UTF-8',
@@ -46,18 +41,18 @@ describe('Read file', function () {
       },
     };
 
-    expect(result.body.declaration).to.deep.eql(expectedDeclaration);
+    expect(result.body.declaration).to.deep.equal(expectedDeclaration);
   });
 
-  it('reading json', async () => {
+  it('should read CSV 1', async () => {
     msg.body = { filename: 'Depotumsätze.csv' };
-    await readFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
+    await readFile.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
 
-    expect(result.body.name).to.eql('amazon-s3-component');
+    expect(result.body.name).to.equal('amazon-s3-component');
   });
 
-  it('reading csv', async () => {
+  it('should read CSV 2', async () => {
     nock('http://api-service.platform.svc.cluster.local.:9000/', { encodedQueryParams: true })
       .post('/v2/resources/storage/signed-url')
       .reply(200, { put_url: 'http://api.io/some', get_url: 'http://api.io/some' });
@@ -66,8 +61,8 @@ describe('Read file', function () {
 
     msg.body = { filename: 'csv/result.csv' };
 
-    await readFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
+    await readFile.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
 
     const expectedAttachment = {
       'csv/result.csv': {
@@ -77,10 +72,10 @@ describe('Read file', function () {
       },
     };
 
-    expect(result.body.attachments).to.deep.eql(expectedAttachment);
+    expect(result.body.attachments).to.deep.equal(expectedAttachment);
   });
 
-  it('reading png', async () => {
+  it('should read PNG', async () => {
     nock('http://api-service.platform.svc.cluster.local.:9000/', { encodedQueryParams: true })
       .post('/v2/resources/storage/signed-url')
       .reply(200, { put_url: 'http://api.io/some', get_url: 'http://api.io/some' });
@@ -89,8 +84,8 @@ describe('Read file', function () {
 
     msg.body = { filename: 'b_jskob_ok.png' };
 
-    await readFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
+    await readFile.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
 
     const expectedAttachment = {
       'b_jskob_ok.png': {
@@ -100,6 +95,6 @@ describe('Read file', function () {
       },
     };
 
-    expect(result.body.attachments).to.deep.eql(expectedAttachment);
+    expect(result.body.attachments).to.deep.equal(expectedAttachment);
   });
 });

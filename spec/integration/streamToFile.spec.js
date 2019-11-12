@@ -1,49 +1,50 @@
-/* eslint-disable global-require,func-names */
-
-const fs = require('fs');
+/* eslint-disable func-names */
 const chai = require('chai');
 const nock = require('nock');
 const sinon = require('sinon');
+const streamToFile = require('../../lib/actions/streamToFile');
+require('dotenv').config();
 
 const { expect } = chai;
 
-const streamToFile = require('../../lib/actions/streamToFile');
+const defaultCfg = {
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  bucketName: 'lloyds-dev/Demo',
+};
 
-describe('Insert file', function () {
-  this.timeout(50000);
-  let configuration;
-  let testInput;
-  let emitter;
+const defaultMsg = {
+  body: {
+    filename: 'some123isin',
+  },
+  attachments: {
+    someKey: {
+      url: 'https://attachment.url.loc/someof',
+    },
+  },
+};
+
+const self = {
+  emit: sinon.spy(),
+};
+
+describe('streamToFile', () => {
+  let cfg;
   let msg;
 
-  before(async () => {
-    if (fs.existsSync('.env')) {
-      require('dotenv').config();
-    }
-
-    configuration = {
-      accessKeyId: process.env.ACCESS_KEY_ID,
-      accessKeySecret: process.env.ACCESS_KEY_SECRET,
-      bucketName: 'lloyds-dev/Demo',
-    };
-  });
-
   beforeEach(() => {
-    emitter = {
-      emit: sinon.spy(),
-    };
-
-    msg = { body: { filename: 'some123isin' }, attachments: { someKey: { url: 'https://attachment.url.loc/someof' } } };
-
-    testInput = [{ hello: 'world' }, { andSomething: 'too' }];
+    cfg = JSON.parse(JSON.stringify(defaultCfg));
+    msg = JSON.parse(JSON.stringify(defaultMsg));
   });
 
-  it('updating', async () => {
-    nock('https://attachment.url.loc/', { encodedQueryParams: true })
-      .get('/someof').reply(200, testInput);
+  afterEach(() => self.emit.resetHistory());
 
-    await streamToFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
-    expect(Object.keys(result.body)[0]).to.eql('ETag');
+  it('should update', async () => {
+    nock('https://attachment.url.loc/', { encodedQueryParams: true })
+      .get('/someof').reply(200, [{ hello: 'world' }, { andSomething: 'too' }]);
+
+    await streamToFile.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
+    expect(Object.keys(result.body)[0]).to.equal('ETag');
   });
 });

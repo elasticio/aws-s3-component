@@ -1,42 +1,29 @@
-/* eslint-disable global-require,func-names */
-
-const fs = require('fs');
+/* eslint-disable func-names */
 const chai = require('chai');
-const sinon = require('sinon');
+const verifyCredentials = require('../../verifyCredentials');
+require('dotenv').config();
 
 const { expect } = chai;
 
-const verifyCredentials = require('../../verifyCredentials');
+const defaultCfg = {
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  accessKeySecret: process.env.ACCESS_KEY_SECRET,
+};
 
-describe('Insert file', function () {
-  this.timeout(50000);
-  let configuration;
-  let cb;
+describe('verifyCredentials', () => {
+  let cfg;
 
-  before(async () => {
-    if (fs.existsSync('.env')) {
-      require('dotenv').config();
-    }
+  beforeEach(() => { cfg = JSON.parse(JSON.stringify(defaultCfg)); });
 
-    configuration = {
-      accessKeyId: process.env.ACCESS_KEY_ID,
-      accessKeySecret: process.env.ACCESS_KEY_SECRET,
-    };
+  it('should validate valid credentials', async () => {
+    const result = await verifyCredentials(cfg, a => a);
+    expect(result).to.deep.equal({ verified: true });
   });
 
-  beforeEach(() => {
-    cb = sinon.spy();
-  });
+  it('should fail to validate an invalid access key ID', async () => {
+    cfg.accessKeyId = 'wrong';
 
-  it('validating credentials - correct', async () => {
-    const result = await verifyCredentials(configuration, cb);
-    expect(result).to.eql({ verified: true });
-  });
-
-  it('validating credentials - incorrect', async () => {
-    configuration.accessKeyId = 'wrong';
-
-    const result = await verifyCredentials(configuration, cb);
-    expect(result).to.eql({ verified: false });
+    const result = await verifyCredentials(cfg, a => a);
+    expect(result).to.deep.equal({ verified: false });
   });
 });
