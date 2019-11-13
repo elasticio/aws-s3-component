@@ -21,7 +21,7 @@ describe('verifyCredentials', () => {
   });
 
   it('should fail to validate an invalid access key ID', async () => {
-    cfg.accessKeyId = 'wrong';
+    cfg.accessKeyId = 'invalid';
 
     const result = await verifyCredentials(cfg, a => a);
     expect(result).to.deep.equal({ verified: false });
