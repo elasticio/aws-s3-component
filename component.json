@@ -148,6 +148,47 @@
         }
       }
     },
+    "renameFile": {
+      "title": "Rename file",
+      "description": "Rename file in S3 bucket",
+      "main": "./lib/actions/renameObject.js",
+      "fields": {
+        "bucketName": {
+          "viewClass": "TextFieldView",
+          "label": "Default Bucket Name",
+          "placeholder": "my-fancy-bucket",
+          "required": true
+        }
+      },
+      "metadata": {
+        "in": {
+          "type": "object",
+          "properties": {
+            "oldFileName": {
+              "type": "string",
+              "required": true
+            },
+            "newFileName": {
+              "type": "string",
+              "required": true
+            },
+            "bucketName": {
+              "type": "string",
+              "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      }
+    },
     "streamToCsv": {
       "deprecated": true,
       "title": "Stream to CSV",
