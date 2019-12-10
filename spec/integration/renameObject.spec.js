@@ -32,8 +32,8 @@ describe('Rename file', function () {
 
     msg = {
       body: {
-        oldFileName: 'test.pdf',
-        newFileName: 'test5.pdf',
+        oldFileName: '11.txt',
+        newFileName: 'testPo.txt',
       },
     };
   });
