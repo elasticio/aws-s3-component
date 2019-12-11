@@ -4,6 +4,9 @@ const chai = require('chai');
 const sinon = require('sinon');
 
 const { expect } = chai;
+const bunyan = require('bunyan');
+
+const logger = bunyan.createLogger({ name: 'verifyCredentials' });
 
 const renameFile = require('../lib/actions/renameObject');
 
@@ -28,13 +31,14 @@ describe('Rename file', function () {
   beforeEach(() => {
     emitter = {
       emit: sinon.spy(),
+      logger,
     };
 
     msg = {
       body: {
         bucketName: 'lloyds-dev',
         oldFileName: 'test.txt',
-        newFileName: 'testRename.txt',
+        newFileName: 'testRename1.txt',
       },
     };
   });
