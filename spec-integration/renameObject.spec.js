@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 const { expect } = chai;
 
-const renameFile = require('../../lib/actions/renameObject');
+const renameFile = require('../lib/actions/renameObject');
 
 describe('Rename file', function () {
   this.timeout(50000);

@@ -2,7 +2,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const nock = require('nock');
-const readFile = require('../../lib/actions/readFile');
+const readFile = require('../lib/actions/readFile');
 require('dotenv').config();
 
 const { expect } = chai;

@@ -2,7 +2,7 @@
 const chai = require('chai');
 const nock = require('nock');
 const sinon = require('sinon');
-const streamToFile = require('../../lib/actions/streamToFile');
+const streamToFile = require('../lib/actions/streamToFile');
 require('dotenv').config();
 
 const { expect } = chai;

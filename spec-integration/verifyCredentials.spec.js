@@ -1,7 +1,7 @@
 require('dotenv').config();
 const chai = require('chai');
 const bunyan = require('bunyan');
-const verifyCredentials = require('../../verifyCredentials');
+const verifyCredentials = require('../verifyCredentials');
 
 const { expect } = chai;
 const logger = bunyan.createLogger({ name: 'verifyCredentials' });

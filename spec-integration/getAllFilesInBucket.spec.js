@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
-const deleteObject = require('../../lib/actions/deleteObject');
+const getAllFilesInBucket = require('../lib/actions/getAllFilesInBucket');
 require('dotenv').config();
 
 const { expect } = chai;
@@ -10,12 +10,12 @@ const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
   region: process.env.REGION,
-  bucketName: 'lloyds-dev',
+  bucketName: 'lloyds-dev/inbound',
 };
 
 const defaultMsg = {
   body: {
-    filename: 'AT0000856323',
+    filename: 'some123isin',
   },
 };
 
@@ -23,7 +23,7 @@ const self = {
   emit: sinon.spy(),
 };
 
-describe('deleteObject', () => {
+describe('getAllFilesInBucket', () => {
   let cfg;
   let msg;
 
@@ -34,9 +34,9 @@ describe('deleteObject', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it('should delete', async () => {
-    await deleteObject.process.call(self, msg, cfg, {});
-    const result = self.emit.getCall(0).args[1];
-    expect(result.body.filename).to.equal(msg.body.filename);
+  it('should get test.xml from bucket', async () => {
+    await getAllFilesInBucket.process.call(self, msg, cfg);
+    const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    expect(files).to.include('inbound/test.xml');
   });
 });
