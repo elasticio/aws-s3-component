@@ -16,7 +16,8 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "pretest": "echo 'nsp check' && eslint lib spec --fix"
+    "pretest": "echo 'nsp check' && eslint lib spec verifyCredentials.js --fix",
+    "test": "mocha spec --recursive --timeout 50000"
   },
   "keywords": [
     "aws",

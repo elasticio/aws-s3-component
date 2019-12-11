@@ -1,42 +1,41 @@
-/* eslint-disable global-require,func-names */
-
-const fs = require('fs');
+/* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
+const deleteObject = require('../../lib/actions/deleteObject');
+require('dotenv').config();
 
 const { expect } = chai;
 
-const readFile = require('../../lib/actions/deleteObject');
+const defaultCfg = {
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  bucketName: 'lloyds-dev',
+};
 
-describe('Delete file', function () {
-  this.timeout(50000);
-  let configuration;
-  let emitter;
+const defaultMsg = {
+  body: {
+    filename: 'AT0000856323',
+  },
+};
+
+const self = {
+  emit: sinon.spy(),
+};
+
+describe('deleteObject', () => {
+  let cfg;
   let msg;
 
-  before(async () => {
-    if (fs.existsSync('.env')) {
-      require('dotenv').config();
-    }
-
-    configuration = {
-      accessKeyId: process.env.ACCESS_KEY_ID,
-      accessKeySecret: process.env.ACCESS_KEY_SECRET,
-      bucketName: 'lloyds-dev',
-    };
-  });
-
   beforeEach(() => {
-    emitter = {
-      emit: sinon.spy(),
-    };
-
-    msg = { body: { filename: 'AT0000856323' } };
+    cfg = JSON.parse(JSON.stringify(defaultCfg));
+    msg = JSON.parse(JSON.stringify(defaultMsg));
   });
 
-  it('deleting', async () => {
-    await readFile.process.call(emitter, msg, configuration, {});
-    const result = emitter.emit.getCall(0).args[1];
-    expect(result.body.filename).to.eql(msg.body.filename);
+  afterEach(() => self.emit.resetHistory());
+
+  it('should delete', async () => {
+    await deleteObject.process.call(self, msg, cfg, {});
+    const result = self.emit.getCall(0).args[1];
+    expect(result.body.filename).to.equal(msg.body.filename);
   });
 });

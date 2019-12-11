@@ -3,3 +3,4 @@ coverage
 .idea
 .env
 lib/utils/awsAttachmentProcessor.js
+.vscode
