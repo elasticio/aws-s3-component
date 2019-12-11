@@ -161,6 +161,10 @@
               "type": "string",
               "required": true
             },
+            "prefix": {
+              "type": "string",
+              "required": false
+            },
             "oldFileName": {
               "type": "string",
               "required": true

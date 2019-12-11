@@ -37,6 +37,7 @@ describe('Rename file', function () {
     msg = {
       body: {
         bucketName: 'lloyds-dev',
+        prefix: 'sprint-review/in/',
         oldFileName: 'test.txt',
         newFileName: 'testRename1.txt',
       },
@@ -46,6 +47,6 @@ describe('Rename file', function () {
   it('Rename file', async () => {
     await renameFile.process.call(emitter, msg, configuration, {});
     const result = emitter.emit.getCall(0).args[1];
-    expect(result.body.Key).to.eql(msg.body.newFileName);
+    expect(result.body.Key).to.eql(`${msg.body.prefix || ''}${msg.body.newFileName}`);
   });
 });
