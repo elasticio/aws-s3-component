@@ -36,7 +36,7 @@ describe('getAllFilesInBucket', () => {
 
   it('should get test.xml from bucket', async () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
-    const files = self.emit.getCalls().map(call => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
     expect(files).to.include('inbound/test.xml');
   });
 });

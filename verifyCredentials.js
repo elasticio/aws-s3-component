@@ -3,7 +3,7 @@ const debug = require('debug')('Credentials');
 
 module.exports = function verifyCredentials(credentials, cb) {
   return Promise.resolve().then(async () => {
-    console.log('Verification started');
+    this.logger.info('Verification started');
 
     debug('Current credentials: %j', credentials);
 
@@ -16,11 +16,11 @@ module.exports = function verifyCredentials(credentials, cb) {
 
     await s3.listObjects({ Bucket: '' }).promise();
 
-    console.log('Verification succeeded');
+    this.logger.info('Verification succeeded');
     cb(null, { verified: true });
     return { verified: true };
   }).catch((err) => {
-    console.error('Error occurred', err.stack || err);
+    this.logger.error('Error occurred', err.stack || err);
     cb(err, { verified: false });
     return { verified: false };
   });
