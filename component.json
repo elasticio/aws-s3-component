@@ -161,7 +161,7 @@
               "type": "string",
               "required": true
             },
-            "prefix": {
+            "folder": {
               "type": "string",
               "required": false
             },

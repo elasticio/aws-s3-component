@@ -37,9 +37,9 @@ describe('Rename file', function () {
     msg = {
       body: {
         bucketName: 'lloyds-dev',
-        prefix: 'sprint-review/in/',
-        oldFileName: 'test.txt',
-        newFileName: 'testRename1.txt',
+        folder: 'sprint-review/in/',
+        oldFileName: 'testRename1.txt',
+        newFileName: 'test.txt',
       },
     };
   });
