@@ -21,7 +21,7 @@ describe('Rename file', function () {
     configuration = {
       accessKeyId: process.env.ACCESS_KEY_ID,
       accessKeySecret: process.env.ACCESS_KEY_SECRET,
-      bucketName: 'lloyds-dev',
+      region: process.env.REGION,
     };
   });
 
@@ -32,15 +32,16 @@ describe('Rename file', function () {
 
     msg = {
       body: {
-        oldFileName: '11.txt',
-        newFileName: 'testPo.txt',
+        bucketName: 'lloyds-dev',
+        oldFileName: 'test.txt',
+        newFileName: 'testRename.txt',
       },
     };
   });
 
-  it('copy', async () => {
+  it('Rename file', async () => {
     await renameFile.process.call(emitter, msg, configuration, {});
     const result = emitter.emit.getCall(0).args[1];
-    expect(result.body.filename).to.eql(msg.body.filename);
+    expect(result.body.Key).to.eql(msg.body.newFileName);
   });
 });

@@ -10,6 +10,7 @@ const { expect } = chai;
 const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  region: process.env.REGION,
   bucketName: 'lloyds-dev/test',
 };
 

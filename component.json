@@ -152,18 +152,14 @@
       "title": "Rename file",
       "description": "Rename file in S3 bucket",
       "main": "./lib/actions/renameObject.js",
-      "fields": {
-        "bucketName": {
-          "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
-          "placeholder": "my-fancy-bucket",
-          "required": true
-        }
-      },
       "metadata": {
         "in": {
           "type": "object",
           "properties": {
+            "bucketName": {
+              "type": "string",
+              "required": true
+            },
             "oldFileName": {
               "type": "string",
               "required": true
@@ -171,10 +167,6 @@
             "newFileName": {
               "type": "string",
               "required": true
-            },
-            "bucketName": {
-              "type": "string",
-              "required": false
             }
           }
         },
