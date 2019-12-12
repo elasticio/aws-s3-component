@@ -6,8 +6,8 @@ const sinon = require('sinon');
 const { expect } = chai;
 const bunyan = require('bunyan');
 
-const logger = bunyan.createLogger({ name: 'verifyCredentials' });
-
+const logger = bunyan.createLogger({ name: 'verifyCredentials', level: 'trace' });
+const { Client } = require('../lib/client');
 const renameFile = require('../lib/actions/renameObject');
 
 describe('Rename file', function () {
@@ -15,17 +15,24 @@ describe('Rename file', function () {
   let configuration;
   let emitter;
   let msg;
+  let src;
+  let client;
+  const bucketName = 'lloyds-dev';
+  const oldFileName = 'oldFileName.txt';
+  const newFileName = 'newFileName.txt';
+  const folder = 'sprint-review/in/';
 
   before(async () => {
     if (fs.existsSync('.env')) {
       require('dotenv').config();
     }
-
+    src = fs.createReadStream('./spec-integration/test.txt');
     configuration = {
       accessKeyId: process.env.ACCESS_KEY_ID,
       accessKeySecret: process.env.ACCESS_KEY_SECRET,
       region: process.env.REGION,
     };
+    client = new Client(logger, configuration);
   });
 
   beforeEach(() => {
@@ -33,20 +40,20 @@ describe('Rename file', function () {
       emit: sinon.spy(),
       logger,
     };
-
-    msg = {
-      body: {
-        bucketName: 'lloyds-dev',
-        folder: 'sprint-review/in/',
-        oldFileName: 'testRename1.txt',
-        newFileName: 'test.txt',
-      },
-    };
   });
 
   it('Rename file', async () => {
+    msg = {
+      body: {
+        bucketName,
+        folder,
+        oldFileName,
+        newFileName,
+      },
+    };
+    await client.upload(bucketName, `${msg.body.folder || ''}${msg.body.oldFileName}`, src);
     await renameFile.process.call(emitter, msg, configuration, {});
     const result = emitter.emit.getCall(0).args[1];
-    expect(result.body.Key).to.eql(`${msg.body.prefix || ''}${msg.body.newFileName}`);
+    expect(result.body.Key).to.eql(`${msg.body.folder || ''}${msg.body.newFileName}`);
   });
 });
