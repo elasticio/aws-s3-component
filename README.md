@@ -29,7 +29,7 @@ This is the component for working with AWS S3 object storage service on [elastic
 The component provides ability to connect to Amazon Simple Storage Service (Amazon S3) object storage service.
 
 ### Completeness Matrix
-![image](https://user-images.githubusercontent.com/40201204/59497932-15e74b00-8e9d-11e9-9e9b-095dd8c4c7ec.png)
+![image](https://user-images.githubusercontent.com/36419533/70732156-97b31680-1d10-11ea-826f-5a2dd55b8251.png)
 
 [Completeness Matrix](https://docs.google.com/spreadsheets/d/1LhKgsTvF32YAmBRh742YxnkrMEGlPEERJc9B6pj4L6E/edit#gid=0)
 
