@@ -15,8 +15,8 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: Running Mocha Tests
-          command: npm test
+          name: Running Mocha Unit&Integration Tests
+          command: npm test && npm run integration-test
   docs:
     docker:
       - image: circleci/node:12-stretch

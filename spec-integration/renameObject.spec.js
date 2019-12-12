@@ -51,7 +51,11 @@ describe('Rename file', function () {
         newFileName,
       },
     };
-    await client.upload(bucketName, `${msg.body.folder || ''}${msg.body.oldFileName}`, src);
+    const oldKeyName = `${msg.body.folder || ''}${msg.body.oldFileName}`;
+    const newKeyName = `${msg.body.folder || ''}${msg.body.newFileName}`;
+    await client.deleteObject(bucketName, oldKeyName);
+    await client.deleteObject(bucketName, newKeyName);
+    await client.upload(bucketName, oldKeyName, src);
     await renameFile.process.call(emitter, msg, configuration, {});
     const result = emitter.emit.getCall(0).args[1];
     expect(result.body.Key).to.eql(`${msg.body.folder || ''}${msg.body.newFileName}`);
