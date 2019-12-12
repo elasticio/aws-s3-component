@@ -32,7 +32,7 @@
           "viewClass": "TextFieldView",
           "label": "Default Bucket Name",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "required": false
         }
       },
       "metadata": {
@@ -48,6 +48,27 @@
               "required": false
             }
           }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Location": {
+              "type": "string",
+              "required": false
+            },
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "Bucket": {
+              "type": "string",
+              "required": true
+            }
+          }
         }
       }
     },
@@ -60,7 +81,7 @@
           "viewClass": "TextFieldView",
           "label": "Default Bucket Name",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "required": false
         }
       },
       "metadata": {
@@ -74,6 +95,15 @@
             "bucketName": {
               "type": "string",
               "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
             }
           }
         }
