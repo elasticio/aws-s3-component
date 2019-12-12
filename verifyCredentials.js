@@ -3,7 +3,12 @@ const { Client } = require('./lib/client');
 module.exports = function verifyCredentials(credentials, cb) {
   return Promise.resolve().then(async () => {
     this.logger.info('Verification started');
-
+    const { accessKeyId, accessKeySecret: secretAccessKey, region } = credentials;
+    if (!accessKeyId || !secretAccessKey || !region) {
+      const errMessage = 'Parameters accessKeyId, secretAccessKey and region are required';
+      this.logger.error(errMessage);
+      throw new Error(errMessage);
+    }
     this.logger.trace('Current credentials: %j', credentials);
     const client = new Client(this.logger, credentials);
     await client.listObjects({ Bucket: '' });

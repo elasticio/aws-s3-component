@@ -27,4 +27,9 @@ describe('verifyCredentials', () => {
     const result = await verifyCredentials.call({ logger }, cfg, (a) => a);
     expect(result).to.deep.equal({ verified: false });
   });
+
+  it('should fail required params are messing', async () => {
+    const result = await verifyCredentials.call({ logger }, { accessKeyId: 'accessKeyId' }, (a) => a);
+    expect(result).to.deep.equal({ verified: false });
+  });
 });
