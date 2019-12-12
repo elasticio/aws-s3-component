@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const { expect } = chai;
 const bunyan = require('bunyan');
 
-const logger = bunyan.createLogger({ name: 'verifyCredentials', level: 'trace' });
+const logger = bunyan.createLogger({ name: 'RenameFile', level: 'trace' });
 const { Client } = require('../lib/client');
 const renameFile = require('../lib/actions/renameObject');
 

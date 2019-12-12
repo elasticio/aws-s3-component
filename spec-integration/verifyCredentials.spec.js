@@ -4,7 +4,7 @@ const bunyan = require('bunyan');
 const verifyCredentials = require('../verifyCredentials');
 
 const { expect } = chai;
-const logger = bunyan.createLogger({ name: 'verifyCredentials' });
+const logger = bunyan.createLogger({ name: 'verifyCredentials', level: 'trace' });
 const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
