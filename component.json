@@ -13,7 +13,7 @@
       "accessKeySecret": {
         "label": "Secret Access Key",
         "required": true,
-        "viewClass": "TextFieldView"
+        "viewClass": "PasswordFieldView"
       },
       "region": {
         "label": "Region",
@@ -208,9 +208,35 @@
         "out": {
           "type": "object",
           "properties": {
-            "filename": {
+            "Key": {
               "type": "string",
               "required": true
+            },
+            "LastModified": {
+              "type": "string",
+              "required": true
+            },
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Size": {
+              "type": "number",
+              "required": true
+            },
+            "StorageClass": {
+              "type": "string",
+              "required": true
+            },
+            "Owner": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "ID": {
+                  "type": "string",
+                  "required": true
+                }
+              }
             }
           }
         }

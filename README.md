@@ -176,7 +176,11 @@ File type resolves by it's extension. The name of attachment would be same to fi
 
 ### Get filenames
 Emit individually all filenames from S3 bucket.
-This action gets all names of files which are storing in S3 bucket with provided name. The filenames emits individually.
+This action gets all names of files which are storing in S3 bucket with provided name. 
+The filenames emits individually.
+
+**Notice**: if you provide bucket and folder (as example `eio-dev/inbound`), not only all names of files will  return but name of root folder (`inbound/') as well.
+
 #### List of Expected Config fields
  - **Default Bucket Name** - name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata);
 
