@@ -13,7 +13,7 @@
       "accessKeySecret": {
         "label": "Secret Access Key",
         "required": true,
-        "viewClass": "TextFieldView"
+        "viewClass": "PasswordFieldView"
       },
       "region": {
         "label": "Region",
@@ -30,9 +30,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -45,7 +46,29 @@
             },
             "bucketName": {
               "type": "string",
+              "title":"Bucket Name and folder",
               "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Location": {
+              "type": "string",
+              "required": false
+            },
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "Bucket": {
+              "type": "string",
+              "required": true
             }
           }
         }
@@ -58,9 +81,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -72,8 +96,18 @@
               "required": true
             },
             "bucketName": {
+              "title":"Bucket Name and folder",
               "type": "string",
               "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
             }
           }
         }
@@ -86,9 +120,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -96,6 +131,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
+              "title":"Bucket Name and folder",
               "type": "string",
               "required": false
             }
@@ -119,9 +155,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and Folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and Folder will override if 'Bucket Name and Folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -133,6 +170,7 @@
               "required": true
             },
             "bucketName": {
+              "title":"Bucket Name and Folder",
               "type": "string",
               "required": false
             }
@@ -158,6 +196,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
+              "title":"Bucket Name and Folder",
               "type": "string",
               "required": true
             },
@@ -178,9 +217,35 @@
         "out": {
           "type": "object",
           "properties": {
-            "filename": {
+            "Key": {
               "type": "string",
               "required": true
+            },
+            "LastModified": {
+              "type": "string",
+              "required": true
+            },
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Size": {
+              "type": "number",
+              "required": true
+            },
+            "StorageClass": {
+              "type": "string",
+              "required": true
+            },
+            "Owner": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "ID": {
+                  "type": "string",
+                  "required": true
+                }
+              }
             }
           }
         }
