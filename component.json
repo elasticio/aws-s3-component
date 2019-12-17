@@ -155,9 +155,9 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name and folder",
+          "label": "Default Bucket Name and Folder",
           "placeholder": "my-fancy-bucket",
-          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "note": "Default Bucket Name and Folder will override if 'Bucket Name and Folder' field is set in metadata",
           "required": false
         }
       },
@@ -170,7 +170,7 @@
               "required": true
             },
             "bucketName": {
-              "title":"Bucket Name and folder",
+              "title":"Bucket Name and Folder",
               "type": "string",
               "required": false
             }
@@ -196,7 +196,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
-              "title":"Bucket Name and folder",
+              "title":"Bucket Name and Folder",
               "type": "string",
               "required": true
             },
