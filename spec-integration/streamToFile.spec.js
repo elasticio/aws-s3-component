@@ -1,15 +1,20 @@
 /* eslint-disable func-names */
+require('dotenv').config();
 const chai = require('chai');
 const nock = require('nock');
 const sinon = require('sinon');
-const streamToFile = require('../../lib/actions/streamToFile');
-require('dotenv').config();
+const bunyan = require('bunyan');
+
+const streamToFile = require('../lib/actions/streamToFile');
 
 const { expect } = chai;
+
+const logger = bunyan.createLogger({ name: 'streamToFile', level: 'trace' });
 
 const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  region: process.env.REGION,
   bucketName: 'lloyds-dev/Demo',
 };
 
@@ -26,6 +31,7 @@ const defaultMsg = {
 
 const self = {
   emit: sinon.spy(),
+  logger,
 };
 
 describe('streamToFile', () => {

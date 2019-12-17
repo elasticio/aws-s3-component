@@ -1,6 +1,7 @@
 {
   "title": "AWS S3",
   "description": "Integration component that can read and write to AWS S3",
+  "buildType": "docker",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
     "fields": {
@@ -12,7 +13,7 @@
       "accessKeySecret": {
         "label": "Secret Access Key",
         "required": true,
-        "viewClass": "TextFieldView"
+        "viewClass": "PasswordFieldView"
       },
       "region": {
         "label": "Region",
@@ -29,9 +30,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -44,7 +46,29 @@
             },
             "bucketName": {
               "type": "string",
+              "title":"Bucket Name and folder",
               "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Location": {
+              "type": "string",
+              "required": false
+            },
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "Bucket": {
+              "type": "string",
+              "required": true
             }
           }
         }
@@ -57,9 +81,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -71,8 +96,18 @@
               "required": true
             },
             "bucketName": {
+              "title":"Bucket Name and folder",
               "type": "string",
               "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
             }
           }
         }
@@ -85,9 +120,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -95,6 +131,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
+              "title":"Bucket Name and folder",
               "type": "string",
               "required": false
             }
@@ -118,9 +155,10 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name",
+          "label": "Default Bucket Name and Folder",
           "placeholder": "my-fancy-bucket",
-          "required": true
+          "note": "Default Bucket Name and Folder will override if 'Bucket Name and Folder' field is set in metadata",
+          "required": false
         }
       },
       "metadata": {
@@ -132,6 +170,7 @@
               "required": true
             },
             "bucketName": {
+              "title":"Bucket Name and Folder",
               "type": "string",
               "required": false
             }
@@ -143,6 +182,70 @@
             "filename": {
               "type": "string",
               "required": true
+            }
+          }
+        }
+      }
+    },
+    "renameFile": {
+      "title": "Rename file",
+      "description": "Rename file in S3 bucket",
+      "main": "./lib/actions/renameObject.js",
+      "metadata": {
+        "in": {
+          "type": "object",
+          "properties": {
+            "bucketName": {
+              "title":"Bucket Name and Folder",
+              "type": "string",
+              "required": true
+            },
+            "folder": {
+              "type": "string",
+              "required": false
+            },
+            "oldFileName": {
+              "type": "string",
+              "required": true
+            },
+            "newFileName": {
+              "type": "string",
+              "required": true
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "LastModified": {
+              "type": "string",
+              "required": true
+            },
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Size": {
+              "type": "number",
+              "required": true
+            },
+            "StorageClass": {
+              "type": "string",
+              "required": true
+            },
+            "Owner": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "ID": {
+                  "type": "string",
+                  "required": true
+                }
+              }
             }
           }
         }

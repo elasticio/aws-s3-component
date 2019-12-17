@@ -1,8 +1,8 @@
 /* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
-const nock = require('nock');
-const readFile = require('../../lib/actions/readFile');
+const readFile = require('../lib/actions/readFile');
+const { BasicAuthRestClient } = require('../lib/StatelessBasicAuthRestClient');
 require('dotenv').config();
 
 const { expect } = chai;
@@ -10,6 +10,7 @@ const { expect } = chai;
 const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
+  region: process.env.REGION,
   bucketName: 'lloyds-dev/test',
 };
 
@@ -45,13 +46,12 @@ describe('readFile', () => {
   });
 
   describe('reads file types other than XML or JSON by using attachmentProcessor', () => {
-    beforeEach(() => {
-      nock('http://api-service.platform.svc.cluster.local.:9000/', { encodedQueryParams: true })
-        .post('/v2/resources/storage/signed-url')
-        .reply(200, { put_url: 'http://api.io/some', get_url: 'http://api.io/some' });
-      nock('http://api.io/', { encodedQueryParams: true })
-        .put('/some').reply(200, { signedUrl: { put_url: 'http://api.io/some' } });
+    let authClientStub;
+    before(() => {
+      authClientStub = sinon.stub(BasicAuthRestClient.prototype, 'makeRequest');
+      authClientStub.returns({ put_url: 'http://api.io/some', get_url: 'http://api.io/some' });
     });
+    after(() => authClientStub.restore());
 
     it('should read CSV 1', async () => {
       msg.body = { filename: 'Depotumsätze.csv' };
