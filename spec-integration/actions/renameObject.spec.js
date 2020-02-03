@@ -7,8 +7,8 @@ const { expect } = chai;
 const bunyan = require('bunyan');
 
 const logger = bunyan.createLogger({ name: 'RenameFile', level: 'info' });
-const { Client } = require('../lib/client');
-const renameFile = require('../lib/actions/renameObject');
+const { Client } = require('../../lib/client');
+const renameFile = require('../../lib/actions/renameObject');
 
 describe('Rename file', function () {
   this.timeout(50000);
@@ -26,7 +26,7 @@ describe('Rename file', function () {
     if (fs.existsSync('.env')) {
       require('dotenv').config();
     }
-    src = fs.createReadStream('./spec-integration/test.txt');
+    src = fs.createReadStream('./spec-integration/actions/test.txt');
     configuration = {
       accessKeyId: process.env.ACCESS_KEY_ID,
       accessKeySecret: process.env.ACCESS_KEY_SECRET,

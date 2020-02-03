@@ -5,7 +5,7 @@ const nock = require('nock');
 const sinon = require('sinon');
 const bunyan = require('bunyan');
 
-const streamToFile = require('../lib/actions/streamToFile');
+const streamToFile = require('../../lib/actions/streamToFile');
 
 const { expect } = chai;
 
