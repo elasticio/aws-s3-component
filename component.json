@@ -30,7 +30,7 @@
       "fields": {
         "bucketName": {
           "viewClass": "TextFieldView",
-          "label": "Default Bucket Name and folder",
+          "label": "Bucket Name and folder",
           "placeholder": "my-fancy-bucket",
           "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
           "required": false

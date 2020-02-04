@@ -12,6 +12,8 @@
      * [Access Key Id](#access-key-id)
      * [Secret Access Key](#secret-access-key)
      * [Region](#region)
+* [Triggers](#triggers)
+   * [Get New and Updated S3 Objects](#get-new-and-updated-s3-objects)
 * [Actions](#actions)
    * [Write file](#write-file)
    * [Read file](#read-file)
@@ -30,7 +32,7 @@ This is the component for working with AWS S3 object storage service on [elastic
 The component provides ability to connect to Amazon Simple Storage Service (Amazon S3) object storage service.
 
 ### Completeness Matrix
-![image](https://user-images.githubusercontent.com/36419533/70732156-97b31680-1d10-11ea-826f-5a2dd55b8251.png)
+![image](https://user-images.githubusercontent.com/22715422/73740795-93740a00-4751-11ea-869d-ff9433f39c4f.png)
 
 [Completeness Matrix](https://docs.google.com/spreadsheets/d/1LhKgsTvF32YAmBRh742YxnkrMEGlPEERJc9B6pj4L6E/edit#gid=0)
 
@@ -64,7 +66,59 @@ A secret access key (for example, `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`).
 
 ### Region
 Example: `ca-central-1`.
-    
+
+
+## Triggers
+### Get New and Updated S3 Objects
+Triggers to get all new and updated files since last polling.
+
+#### List of Expected Config fields
+ - **Bucket Name and folder** - name of S3 bucket to read files from
+ - **Emit Behaviour**: Options are: default is `Emit Individually` emits each object in separate message, `Fetch All` emits all objects in one message
+ - **Start Time**: Start datetime of polling. Default min date:`-271821-04-20T00:00:00.000Z`
+ - **End Time**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
+ - **Enable File Attachments**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
+
+<details> 
+<summary>Output metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "Key": {
+      "type": "string",
+      "required": true
+    },
+    "LastModified": {
+      "type": "string",
+      "required": true
+    },
+    "ETag": {
+      "type": "string",
+      "required": true
+    },
+    "Size": {
+      "type": "number",
+      "required": true
+    },
+    "StorageClass": {
+      "type": "string",
+      "required": true
+    },
+    "Owner": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  }
+}
+```
+</details>
 
 ## Actions
 ### Write file
