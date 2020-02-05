@@ -25,6 +25,7 @@
   "triggers": {
     "pollingTrigger": {
       "title": "Get New and Updated S3 Objects",
+      "type": "polling",
       "description": "Get New and Updated S3 Objects by provided time limits",
       "main": "./lib/triggers/pollingTrigger.js",
       "fields": {
