@@ -1,8 +1,6 @@
 # 1.2.3 (December 26, 2019)
-    * Fix `Error! Cannot convert undefined or null to object` error on no attachments object in message in Write file action
 
-## General Changes
-    * Update sailor version to 2.5.4
+    * Fix `Error! Cannot convert undefined or null to object` error on no attachments object in message in Write file action
 
 # 1.2.1 (December 26, 2019)
 
