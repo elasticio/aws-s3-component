@@ -70,7 +70,7 @@ Example: `ca-central-1`.
 
 ## Triggers
 ### Get New and Updated S3 Objects
-Triggers to get all new and updated files since last polling.
+Triggers to get all new and updated s3 objects since last polling.
 
 #### List of Expected Config fields
  - **Bucket Name and folder** - name of S3 bucket to read files from
