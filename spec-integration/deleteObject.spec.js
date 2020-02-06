@@ -1,6 +1,9 @@
 /* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
+const logger = require('@elastic.io/component-logger')();
+
+const { Client } = require('../lib/client');
 const deleteObject = require('../lib/actions/deleteObject');
 require('dotenv').config();
 
@@ -21,6 +24,7 @@ const defaultMsg = {
 
 const self = {
   emit: sinon.spy(),
+  logger,
 };
 
 describe('deleteObject', () => {
@@ -34,9 +38,20 @@ describe('deleteObject', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it('should delete', async () => {
-    await deleteObject.process.call(self, msg, cfg, {});
-    const result = self.emit.getCall(0).args[1];
-    expect(result.body.filename).to.equal(msg.body.filename);
+  it('delete file', async () => {
+    const client = new Client(logger, cfg);
+    await client.upload(cfg.bucketName, msg.body.filename, 'some text file content');
+
+    const result = await deleteObject.process.call(self, msg, cfg, {});
+    const emitterCalls = self.emit.getCalls();
+    expect(result.body).to.deep.equal({ filename: msg.body.filename });
+    expect(emitterCalls.length).to.equal(0);
+  });
+
+  it('process file already not exists case', async () => {
+    const result = await deleteObject.process.call(self, msg, cfg, {});
+    const emitterCalls = self.emit.getCalls();
+    expect(result.body).to.deep.equal({});
+    expect(emitterCalls.length).to.equal(0);
   });
 });

@@ -1,3 +1,7 @@
+# 1.2.3 (February 6, 2020)
+
+    * Add empty response to Delete file action when file already not exists
+
 # 1.2.1 (December 26, 2019)
 
 ## General Changes
