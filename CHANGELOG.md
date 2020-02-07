@@ -1,3 +1,8 @@
+# 1.2.2 (February 12, 2020)
+
+## General Changes
+    * Add bucket name verification according to https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
+
 # 1.2.1 (December 26, 2019)
 
 ## General Changes
