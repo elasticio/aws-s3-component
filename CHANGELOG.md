@@ -1,3 +1,7 @@
+# 1.2.2 (February 10, 2020)
+
+    * Add attachment size limitation
+
 # 1.2.1 (December 26, 2019)
 
 ## General Changes
