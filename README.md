@@ -48,6 +48,11 @@ For integration-tests is required to specify following environment variables:
 
 `REGION` - region.
 
+For `elastic.io` attachments configuration:
+
+`ATTACHMENT_MAX_SIZE` - maximal possible attachment size in bytes.
+By default set to 1000000 and according to platform limitations CAN'T be bigger than that. 
+
 For debugging purposes there is: 
 
 `LOG_LEVEL` - `trace` | `debug` | `info` | `warning` | `error` that controls logger level.
@@ -186,6 +191,8 @@ File type resolves by it's extension. The name of attachment would be same to fi
 Emit individually all filenames from S3 bucket.
 This action gets all names of files which are storing in S3 bucket with provided name. 
 The filenames emits individually.
+
+Bucket name should comply with  https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html. Action responses with an according error otherwise.
 
 **Notice**: if you provide bucket and folder (as example `eio-dev/inbound`), not only all names of files will  return but name of root folder (`inbound/') as well.
 
