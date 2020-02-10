@@ -1,14 +1,10 @@
 /* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
-<<<<<<< HEAD:spec-integration/actions/deleteObject.spec.js
-const deleteObject = require('../../lib/actions/deleteObject');
-=======
 const logger = require('@elastic.io/component-logger')();
 
-const { Client } = require('../lib/client');
-const deleteObject = require('../lib/actions/deleteObject');
->>>>>>> sprint-33-master:spec-integration/deleteObject.spec.js
+const { Client } = require('../../lib/client');
+const deleteObject = require('../../lib/actions/deleteObject');
 require('dotenv').config();
 
 const { expect } = chai;
