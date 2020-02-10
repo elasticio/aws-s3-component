@@ -1,5 +1,8 @@
-# 1.2.2 (February 10, 2020)
+# 1.2.2 (February 12, 2020)
 
+## General Changes
+    * Add bucket name verification according to https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
+    * Fix `Error! Cannot convert undefined or null to object` error on no attachments object in message in Write file action
     * Add attachment size limitation
 
 # 1.2.1 (December 26, 2019)

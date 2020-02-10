@@ -192,6 +192,8 @@ Emit individually all filenames from S3 bucket.
 This action gets all names of files which are storing in S3 bucket with provided name. 
 The filenames emits individually.
 
+Bucket name should comply with  https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html. Action responses with an according error otherwise.
+
 **Notice**: if you provide bucket and folder (as example `eio-dev/inbound`), not only all names of files will  return but name of root folder (`inbound/') as well.
 
 #### List of Expected Config fields
