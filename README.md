@@ -48,6 +48,11 @@ For integration-tests is required to specify following environment variables:
 
 `REGION` - region.
 
+For `elastic.io` attachments configuration:
+
+`ATTACHMENT_MAX_SIZE` - maximal possible attachment size in bytes.
+By default set to 1000000 and according to platform limitations CAN'T be bigger than that. 
+
 For debugging purposes there is: 
 
 `LOG_LEVEL` - `trace` | `debug` | `info` | `warning` | `error` that controls logger level.
