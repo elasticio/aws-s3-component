@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 const chai = require('chai');
 const sinon = require('sinon');
-const getAllFilesInBucket = require('../lib/actions/getAllFilesInBucket');
+const getAllFilesInBucket = require('../../lib/actions/getAllFilesInBucket');
 require('dotenv').config();
 
 const { expect } = chai;
