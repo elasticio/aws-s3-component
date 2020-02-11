@@ -6,6 +6,7 @@
     * Fix `Error! Cannot convert undefined or null to object` error on no attachments object in message in Write file action
     * Add attachment size limitation
     * Add empty response to Delete file action when file already not exists
+    * Add possibility to retrieve more than 1,000 files for 'Get filenames' action
 
 # 1.2.1 (December 26, 2019)
 
