@@ -1,3 +1,8 @@
+# 1.2.3 (February 12, 2020)
+
+## General Changes
+    * Add possibility to retrieve more than 1,000 files for 'Get filenames' action
+
 # 1.2.2 (February 12, 2020)
 
 ## General Changes

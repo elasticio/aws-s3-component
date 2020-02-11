@@ -10,12 +10,12 @@ const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
   region: process.env.REGION,
-  bucketName: 'lloyds-dev/inbound',
+  bucketName: 'lloyds-dev/test-dir-dont-delete',
 };
 
 const defaultMsg = {
   body: {
-    filename: 'some123isin',
+    filename: 'testfile',
   },
 };
 
@@ -34,9 +34,15 @@ describe('getAllFilesInBucket', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it('should get test.xml from bucket', async () => {
+  it('Should get testfile from bucket', async () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
     const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
-    expect(files).to.include('inbound/test.xml');
+    expect(files).to.include('test-dir-dont-delete/testfile');
+  });
+
+  it('Should fetch more than 1000 files from bucket', async () => {
+    await getAllFilesInBucket.process.call(self, msg, cfg);
+    const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    expect(files.length).to.be.above(1002);
   });
 });
