@@ -1,6 +1,7 @@
-# 1.2.2 (February 12, 2020)
+# 1.3.0 (February 12, 2020)
 
 ## General Changes
+    * Add Get New and Updated S3 Objects trigger
     * Add bucket name verification according to https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
     * Fix `Error! Cannot convert undefined or null to object` error on no attachments object in message in Write file action
     * Add attachment size limitation

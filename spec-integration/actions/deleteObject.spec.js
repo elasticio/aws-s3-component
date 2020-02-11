@@ -3,8 +3,8 @@ const chai = require('chai');
 const sinon = require('sinon');
 const logger = require('@elastic.io/component-logger')();
 
-const { Client } = require('../lib/client');
-const deleteObject = require('../lib/actions/deleteObject');
+const { Client } = require('../../lib/client');
+const deleteObject = require('../../lib/actions/deleteObject');
 require('dotenv').config();
 
 const { expect } = chai;
