@@ -22,6 +22,86 @@
       }
     }
   },
+  "triggers": {
+    "pollingTrigger": {
+      "title": "Get New and Updated S3 Objects",
+      "type": "polling",
+      "description": "Get New and Updated S3 Objects by provided time limits",
+      "main": "./lib/triggers/pollingTrigger.js",
+      "fields": {
+        "bucketName": {
+          "viewClass": "TextFieldView",
+          "label": "Bucket Name and Folder",
+          "placeholder": "my-bucket/my-folder",
+          "required": true
+        },
+        "emitBehaviour": {
+          "label": "Emit Behaviour",
+          "viewClass": "SelectView",
+          "required": false,
+          "prompt": "Default Emit Individually",
+          "model": {
+            "emitIndividually": "Emit Individually",
+            "fetchAll": "Fetch All"
+          }
+        },
+        "startTime": {
+          "label": "Start Time",
+          "viewClass": "TextFieldView",
+          "required": false,
+          "note": "Input format: ISO 8601. Default: minimum time",
+          "placeholder": "2020-01-01T01:01:01Z"
+        },
+        "endTime": {
+          "label": "End Time",
+          "viewClass": "TextFieldView",
+          "required": false,
+          "note": "Input format: ISO 8601. Default: maximum time",
+          "placeholder": "2020-01-01T01:01:01Z"
+        },
+        "enableFileAttachments": {
+          "viewClass": "CheckBoxView",
+          "label": "Enable File Attachments"
+        }
+      },
+      "metadata": {
+        "out": {
+          "type": "object",
+          "properties": {
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "LastModified": {
+              "type": "string",
+              "required": true
+            },
+            "ETag": {
+              "type": "string",
+              "required": true
+            },
+            "Size": {
+              "type": "number",
+              "required": true
+            },
+            "StorageClass": {
+              "type": "string",
+              "required": true
+            },
+            "Owner": {
+              "type": "object",
+              "properties": {
+                "ID": {
+                  "type": "string",
+                  "required": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "actions": {
     "streamToFile": {
       "title": "Write file",
