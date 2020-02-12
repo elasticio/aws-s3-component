@@ -10,7 +10,7 @@ const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
   region: process.env.REGION,
-  bucketName: 'lloyds-dev/test-dir-dont-delete',
+  bucketName: '/lloyds-dev/test-dir-dont-delete',
 };
 
 const defaultMsg = {
@@ -77,15 +77,6 @@ describe('getAllFilesInBucket', () => {
       expect(true).to.be.false;
     } catch (e) {
       expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: null');
-    }
-  });
-  it('should fail for invalid bucket name', async () => {
-    try {
-      cfg.bucketName = '/invalid/test';
-      await getAllFilesInBucket.process.call(self, msg, cfg);
-      expect(true).to.be.false;
-    } catch (e) {
-      expect(e.message).to.be.eql('Bucket name cant start with /, provided bucket name: /invalid/test');
     }
   });
   it('should fail if bucket not exist', async () => {
