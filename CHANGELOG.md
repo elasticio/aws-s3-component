@@ -6,7 +6,9 @@
     * Add attachment size limitation
     * Add empty response to Delete file action when file already not exists
     * Add possibility to retrieve more than 1,000 files for 'Get filenames' action
-
+    * Improved error handling for Get filenames action
+    * Removed invalid docs job from circle ci
+    
 # 1.2.1 (December 26, 2019)
 
 ## General Changes
