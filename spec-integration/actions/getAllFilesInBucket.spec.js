@@ -10,7 +10,7 @@ const defaultCfg = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   accessKeySecret: process.env.ACCESS_KEY_SECRET,
   region: process.env.REGION,
-  bucketName: 'lloyds-dev/test-dir-dont-delete',
+  bucketName: '/lloyds-dev/test-dir-dont-delete',
 };
 
 const defaultMsg = {
@@ -44,5 +44,57 @@ describe('getAllFilesInBucket', () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
     const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
     expect(files.length).to.be.above(1002);
+  });
+  it('should emit empty message if no files was found in bucket', async () => {
+    cfg.bucketName = 'lloyds-dev/notExistFolder';
+    await getAllFilesInBucket.process.call(self, msg, cfg);
+    expect(self.emit.args[0][0]).to.be.eql('data');
+    expect(self.emit.args[0][1].body).to.be.eql({});
+    expect(self.emit.args[1][0]).to.be.eql('end');
+  });
+  it('should fail for empty bucket name', async () => {
+    try {
+      cfg.bucketName = '';
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: ');
+    }
+  });
+  it('should fail for empty folder name', async () => {
+    try {
+      cfg.bucketName = 'lloyds-dev/';
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket name must contain folder name. Bucket name was: lloyds-dev/');
+    }
+  });
+  it('should fail for undefined bucket name', async () => {
+    try {
+      cfg.bucketName = undefined;
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: undefined');
+    }
+  });
+  it('should fail for null bucket name', async () => {
+    try {
+      cfg.bucketName = null;
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: null');
+    }
+  });
+  it('should fail if bucket not exist', async () => {
+    try {
+      cfg.bucketName = 'notExistBucket/test';
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket notExistBucket/test not exist');
+    }
   });
 });
