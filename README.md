@@ -5,7 +5,7 @@
    * [Description](#description)
    * [Purpose](#purpose)
    * [Completeness Matrix](#completeness-matrix)
-   * [How works. SDK version](#how-works.-sdk-version)
+   * [How works. SDK version](#how-works-sdk-version)
 * [Requirements](#requirements)
    * [Environment variables](#environment-variables)
 * [Credentials](#credentials)
@@ -42,22 +42,13 @@ The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ '
 ## Requirements
 
 #### Environment variables
-For integration-tests is required to specify following environment variables:
-
-`ACCESS_KEY_ID` - access key ID;
-
-`ACCESS_KEY_SECRET` - secret access key.
-
-`REGION` - region.
-
-For `elastic.io` attachments configuration:
-
-`ATTACHMENT_MAX_SIZE` - maximal possible attachment size in bytes.
-By default set to 1000000 and according to platform limitations CAN'T be bigger than that. 
-
-For debugging purposes there is: 
-
-`LOG_LEVEL` - `trace` | `debug` | `info` | `warning` | `error` that controls logger level.
+Name|Mandatory|Description|Values|
+|----|---------|-----------|------|
+|`LOG_LEVEL`| false | Controls logger level | `trace`, `debug`, `info`, `warning`, `error` |
+|`ATTACHMENT_MAX_SIZE`| false | For `elastic.io` attachments configuration. Maximal possible attachment size in bytes. By default set to 1000000 and according to platform limitations CAN'T be bigger than that. | Up to `1000000` bytes|
+|`ACCESS_KEY_ID`| false | For integration-tests is required to specify this variable |  |
+|`ACCESS_KEY_SECRET`| false | For integration-tests is required to specify this variable |  |
+|`REGION`  | false | For integration-tests is required to specify this variable |  |
 
 ## Credentials
 Access keys consist of two parts: an access key ID and a secret access key. 
