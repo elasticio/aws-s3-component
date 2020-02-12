@@ -35,14 +35,14 @@ describe('pollingTrigger', () => {
     await getAllFilesInBucket.process.call(self, {}, cfg, {});
 
     const emittedData = self.emit.getCalls()
-      .filter(call => call.args[0] === 'data')
-      .map(call => call.args[1]);
+      .filter((call) => call.args[0] === 'data')
+      .map((call) => call.args[1]);
 
-    expect(emittedData.map(file => file.body.Key)).to.include('inbound/test.xml');
+    expect(emittedData.map((file) => file.body.Key)).to.include('inbound/test.xml');
 
     const emittedSnapshots = self.emit.getCalls()
-      .filter(call => call.args[0] === 'snapshot')
-      .map(call => call.args[1]);
+      .filter((call) => call.args[0] === 'snapshot')
+      .map((call) => call.args[1]);
 
     expect(emittedSnapshots.length).to.be.equals(1);
     expect(emittedSnapshots[0]).to.contain.keys('startTime');
@@ -54,15 +54,15 @@ describe('pollingTrigger', () => {
     await getAllFilesInBucket.process.call(self, {}, cfg, {});
 
     const emittedData = self.emit.getCalls()
-      .filter(call => call.args[0] === 'data')
-      .map(call => call.args[1]);
+      .filter((call) => call.args[0] === 'data')
+      .map((call) => call.args[1]);
 
     expect(emittedData.length).to.be.equals(1);
-    expect(emittedData[0].body.results.map(file => file.Key)).to.include('inbound/test.xml');
+    expect(emittedData[0].body.results.map((file) => file.Key)).to.include('inbound/test.xml');
 
     const emittedSnapshots = self.emit.getCalls()
-      .filter(call => call.args[0] === 'snapshot')
-      .map(call => call.args[1]);
+      .filter((call) => call.args[0] === 'snapshot')
+      .map((call) => call.args[1]);
 
     expect(emittedSnapshots.length).to.be.equals(1);
     expect(emittedSnapshots[0]).to.contain.keys('startTime');

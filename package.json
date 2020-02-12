@@ -16,7 +16,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "pretest": "echo 'nsp check' && eslint lib spec verifyCredentials.js --fix",
+    "pretest": "echo 'nsp check' && eslint lib spec spec-integration verifyCredentials.js --fix",
     "test": "mocha spec --recursive --timeout 50000",
     "integration-test": "mocha spec-integration/** --timeout 50000"
   },
