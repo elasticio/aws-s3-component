@@ -5,7 +5,7 @@
    * [Description](#description)
    * [Purpose](#purpose)
    * [Completeness Matrix](#completeness-matrix)
-   * [How works. SDK version](#how-works.-sdk-version)
+   * [How works. SDK version](#how-works-sdk-version)
 * [Requirements](#requirements)
    * [Environment variables](#environment-variables)
 * [Credentials](#credentials)
