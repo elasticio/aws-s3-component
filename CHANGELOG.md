@@ -2,6 +2,7 @@
 
 ## General Changes
     * Improved error handling for Get filenames action
+    * Removed invalid docs job from circle ci
     
 # 1.2.1 (December 26, 2019)
 
