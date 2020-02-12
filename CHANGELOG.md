@@ -1,3 +1,8 @@
+# 1.2.1 (February 13, 2020)
+
+## General Changes
+    * Improved error handling for Get filenames action
+    
 # 1.2.1 (December 26, 2019)
 
 ## General Changes
