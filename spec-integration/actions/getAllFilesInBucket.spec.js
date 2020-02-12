@@ -61,6 +61,15 @@ describe('getAllFilesInBucket', () => {
       expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: ');
     }
   });
+  it('should fail for empty folder name', async () => {
+    try {
+      cfg.bucketName = 'lloyds-dev/';
+      await getAllFilesInBucket.process.call(self, msg, cfg);
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.be.eql('Bucket name must contain folder name. Bucket name was: lloyds-dev/');
+    }
+  });
   it('should fail for undefined bucket name', async () => {
     try {
       cfg.bucketName = undefined;
