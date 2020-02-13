@@ -52,6 +52,20 @@ describe('getAllFilesInBucket', () => {
     expect(self.emit.args[0][1].body).to.be.eql({});
     expect(self.emit.args[1][0]).to.be.eql('end');
   });
+  it('should emit empty message empty folder name', async () => {
+    cfg.bucketName = 'lloyds-dev';
+    await getAllFilesInBucket.process.call(self, msg, cfg);
+    expect(self.emit.args[0][0]).to.be.eql('data');
+    expect(self.emit.args[0][1].body).to.be.eql({});
+    expect(self.emit.args[1][0]).to.be.eql('end');
+  });
+  it('should emit empty message empty folder name with "/"', async () => {
+    cfg.bucketName = 'lloyds-dev/';
+    await getAllFilesInBucket.process.call(self, msg, cfg);
+    expect(self.emit.args[0][0]).to.be.eql('data');
+    expect(self.emit.args[0][1].body).to.be.eql({});
+    expect(self.emit.args[1][0]).to.be.eql('end');
+  });
   it('should fail for empty bucket name', async () => {
     try {
       cfg.bucketName = '';
@@ -59,15 +73,6 @@ describe('getAllFilesInBucket', () => {
       expect(true).to.be.false;
     } catch (e) {
       expect(e.message).to.be.eql('Bucket name cant be empty. Provided bucket name: ');
-    }
-  });
-  it('should fail for empty folder name', async () => {
-    try {
-      cfg.bucketName = 'lloyds-dev/';
-      await getAllFilesInBucket.process.call(self, msg, cfg);
-      expect(true).to.be.false;
-    } catch (e) {
-      expect(e.message).to.be.eql('Bucket name must contain folder name. Bucket name was: lloyds-dev/');
     }
   });
   it('should fail for undefined bucket name', async () => {
