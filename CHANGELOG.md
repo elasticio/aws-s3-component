@@ -1,4 +1,4 @@
-# 1.3.0 (February 12, 2020)
+# 1.3.0 (February 13, 2020)
 
 ## General Changes
     * Add Get New and Updated S3 Objects trigger
