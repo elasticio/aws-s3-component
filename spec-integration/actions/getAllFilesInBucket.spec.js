@@ -36,13 +36,13 @@ describe('getAllFilesInBucket', () => {
 
   it('Should get testfile from bucket', async () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
-    const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    const files = self.emit.getCalls().map((call) => (call.args[1].body.filename));
     expect(files).to.include('test-dir-dont-delete/testfile');
   });
 
   it('Should fetch more than 1000 files from bucket', async () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
-    const files = self.emit.getCalls().map((call) => (call.args[1] ? call.args[1].body.filename : 'end emit'));
+    const files = self.emit.getCalls().map((call) => (call.args[1].body.filename));
     expect(files.length).to.be.above(1002);
   });
   it('should emit empty message if no files was found in bucket', async () => {
@@ -50,21 +50,18 @@ describe('getAllFilesInBucket', () => {
     await getAllFilesInBucket.process.call(self, msg, cfg);
     expect(self.emit.args[0][0]).to.be.eql('data');
     expect(self.emit.args[0][1].body).to.be.eql({});
-    expect(self.emit.args[1][0]).to.be.eql('end');
   });
   it('should emit empty message empty folder name', async () => {
     cfg.bucketName = 'lloyds-dev';
     await getAllFilesInBucket.process.call(self, msg, cfg);
     expect(self.emit.args[0][0]).to.be.eql('data');
     expect(self.emit.args[0][1].body).to.be.eql({});
-    expect(self.emit.args[1][0]).to.be.eql('end');
   });
   it('should emit empty message empty folder name with "/"', async () => {
     cfg.bucketName = 'lloyds-dev/';
     await getAllFilesInBucket.process.call(self, msg, cfg);
     expect(self.emit.args[0][0]).to.be.eql('data');
     expect(self.emit.args[0][1].body).to.be.eql({});
-    expect(self.emit.args[1][0]).to.be.eql('end');
   });
   it('should fail for empty bucket name', async () => {
     try {
