@@ -26,7 +26,10 @@
     "pollingTrigger": {
       "title": "Get New and Updated S3 Objects",
       "type": "polling",
-      "description": "Get New and Updated S3 Objects by provided time limits",
+      "help": {
+        "description": "Get New and Updated S3 Objects by provided time limits",
+        "link": "/components/aws-s3/index.html#get-new-and-updated-s3-objects"
+      },
       "main": "./lib/triggers/pollingTrigger.js",
       "fields": {
         "bucketName": {
@@ -105,7 +108,10 @@
   "actions": {
     "streamToFile": {
       "title": "Write file",
-      "description": "Put stream as file into S3 bucket",
+      "help": {
+        "description": "Put stream as file into S3 bucket",
+        "link": "/components/aws-s3/index.html#write-file"
+      },
       "main": "./lib/actions/streamToFile.js",
       "fields": {
         "bucketName": {
@@ -156,7 +162,10 @@
     },
     "readFile": {
       "title": "Read file",
-      "description": "Read file from S3 bucket",
+      "help": {
+        "description": "Read file from S3 bucket",
+        "link": "/components/aws-s3/index.html#read-file"
+      },
       "main": "./lib/actions/readFile.js",
       "fields": {
         "bucketName": {
@@ -195,7 +204,10 @@
     },
     "getAllFilesInBucket": {
       "title": "Get filenames",
-      "description": "Emit individually all filenames from S3 bucket",
+      "help": {
+        "description": "Emit individually all filenames from S3 bucket",
+        "link": "/components/aws-s3/index.html#get-filenames"
+      },
       "main": "./lib/actions/getAllFilesInBucket.js",
       "fields": {
         "bucketName": {
@@ -230,7 +242,10 @@
     },
     "deleteFile": {
       "title": "Delete file",
-      "description": "Delete file from S3 bucket",
+      "help": {
+        "description": "Delete file from S3 bucket",
+        "link": "/components/aws-s3/index.html#delete-file"
+      },
       "main": "./lib/actions/deleteObject.js",
       "fields": {
         "bucketName": {
@@ -269,7 +284,10 @@
     },
     "renameFile": {
       "title": "Rename file",
-      "description": "Rename file in S3 bucket",
+      "help": {
+        "description": "Rename file in S3 bucket",
+        "link": "/components/aws-s3/index.html#rename-file"
+      },
       "main": "./lib/actions/renameObject.js",
       "metadata": {
         "in": {
@@ -334,7 +352,10 @@
     "streamToCsv": {
       "deprecated": true,
       "title": "Stream to CSV",
-      "description": "Action is deprecated. Use 'Write file' action instead",
+      "help": {
+        "description": "Action is deprecated. Use 'Write file' action instead",
+        "link": "/components/aws-s3/index.html#stream-to-csv"
+      },
       "main": "./lib/actions/streamToCsv.js",
       "fields": {
         "bucketName": {
