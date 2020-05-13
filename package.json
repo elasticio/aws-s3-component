@@ -9,7 +9,7 @@
     "url": "http://elastic.io"
   },
   "engines": {
-    "npm": ">=12"
+    "node": ">=12.13.0"
   },
   "files": [
     "lib"
