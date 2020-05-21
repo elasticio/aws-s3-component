@@ -38,7 +38,7 @@
     "elasticio-node": "0.0.9",
     "elasticio-sailor-nodejs": "2.6.7",
     "iconv-lite": "0.4.24",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "mime-types": "2.1.21",
     "q": "1.5.1",
     "remove-leading-slash": "1.0.1",
