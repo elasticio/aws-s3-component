@@ -11,9 +11,9 @@ module.exports = function verifyCredentials(credentials, cb) {
     }
     this.logger.trace('Current credentials: %j', credentials);
     const client = new Client(this.logger, credentials);
-    const bucketsData = await client.listBuckets();
-    if (bucketsData.Buckets.length < 1) {
-      this.logger.info(`API keys are valid but they don't have permission to manipulate any existing buckets.`);
+    const bucketsNames = await client.listBucketNames();
+    if (bucketsNames.length < 1) {
+      this.logger.info('API keys are valid but they don\'t have permission to manipulate any existing buckets.');
     }
     this.logger.info('Verification succeeded');
     cb(null, { verified: true });
