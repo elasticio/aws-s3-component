@@ -9,16 +9,16 @@
     "url": "http://elastic.io"
   },
   "engines": {
-    "node": ">=12.13.0"
+    "node": "14"
   },
   "files": [
     "lib"
   ],
   "main": "lib/index.js",
   "scripts": {
-    "pretest": "echo 'nsp check' && eslint lib spec spec-integration verifyCredentials.js --fix",
+    "pretest": "eslint lib spec spec-integration verifyCredentials.js --fix",
     "test": "mocha spec --recursive --timeout 50000",
-    "integration-test": "mocha spec-integration/** --timeout 50000"
+    "integration-test": "mocha spec-integration --recursive --timeout 50000"
   },
   "keywords": [
     "aws",
