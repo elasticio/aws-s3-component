@@ -15,11 +15,13 @@
 * [Triggers](#triggers)
    * [Get New and Updated S3 Objects](#get-new-and-updated-s3-objects)
 * [Actions](#actions)
-   * [Write file](#write-file)
+   * [Write File to S3 From a Provided Attachment](#write-file-to-s3-from-a-provided-attachment)
    * [Read file](#read-file)
    * [Get filenames](#get-filenames)
    * [Delete file](#delete-file)
    * [Rename file](#rename-file)
+   * [Write file](#write-file)
+   * [Stream to CSV](#stream-to-csv)
 * [Known Limitations](#known-limitations)
 * [License](#license)
 
@@ -32,12 +34,12 @@ This is the component for working with AWS S3 object storage service on [elastic
 The component provides ability to connect to Amazon Simple Storage Service (Amazon S3) object storage service.
 
 ### Completeness Matrix
-![image](https://user-images.githubusercontent.com/22715422/73740795-93740a00-4751-11ea-869d-ff9433f39c4f.png)
+![Completeness Matrix](https://user-images.githubusercontent.com/5710732/82918058-312e5780-9f42-11ea-9f80-9eb6cc9aed35.png)
 
-[Completeness Matrix](https://docs.google.com/spreadsheets/d/1LhKgsTvF32YAmBRh742YxnkrMEGlPEERJc9B6pj4L6E/edit#gid=0)
+[Completeness Matrix](https://docs.google.com/spreadsheets/d/1sptYGKkInnAbfRRbzLr5oOZUd3-COekQWGKpqQUYVfc/edit#gid=0)
 
 ### How works. SDK version  
-The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version 2.314.0.
+The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version 2.683.0.
 
 ## Requirements
 
@@ -51,7 +53,7 @@ Name|Mandatory|Description|Values|
 |`REGION`  | false | For integration-tests is required to specify this variable |  |
 
 ## Credentials
-Access keys consist of two parts: an access key ID and a secret access key. 
+Access keys consist of three parts: an access key ID, a secret access key and a region.  
 Like a user name and password, you must use both the access key ID and secret access key together to authenticate your requests.
 According to [AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro) for buckets created in Regions launched after March 20, 2019 `Region` is required for AWS credential.
 ### Access Key Id
@@ -73,7 +75,7 @@ Triggers to get all new and updated s3 objects since last polling.
  - **Emit Behaviour**: Options are: default is `Emit Individually` emits each object in separate message, `Fetch All` emits all objects in one message
  - **Start Time**: Start datetime of polling. Default min date:`-271821-04-20T00:00:00.000Z`
  - **End Time**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
- - **Enable File Attachments**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
+ - **Enable File Attachments**: If selected, the contents of the file will be exported in addition to the file metadata.
 
 <details> 
 <summary>Output metadata</summary>
@@ -117,69 +119,22 @@ Triggers to get all new and updated s3 objects since last polling.
 </details>
 
 ## Actions
-### Write file
-Put stream as file into S3 bucket.
-This action creates or rewrites a new file on S3 with the content that is passed as an input attachment.
-The name of the file would be the same to the attachment name.
-Be careful: this action can process only one attachment - if it would be more or no attachment at all the execution would fail with exception.
-#### List of Expected Config fields
- - **Default Bucket Name and folder** - name of S3 bucket to write file in (by default, if `bucketName` is not provided in metadata);
+### Write File to S3 From a Provided Attachment
+Given a filename and a URL to an attachment stored in the platform, transfers the contents of the attachment to AWS S3. The component returns a summary of the written file. AWS S3 always overwrites the contents of the file if it already exists.
  
 #### Expected input metadata
- - **filename** - name of resulted file at S3 bucket (optional);
- - **bucketName** - name of S3 bucket to write file in (will replace `Default Bucket Name and folder` if provided, the field is optional).
- 
-![image](https://user-images.githubusercontent.com/40201204/59688384-448b5b80-91e6-11e9-8dd0-e007983055c8.png)
+ - **bucketName** - name of S3 bucket to write the file to; Sufficient write permission is required;
+ - **fileName** - Name of file/S3 object to write. Use `/` characters in the filename to create folders;
+ - **attachmentUrl** - Url to the attachment stored in the platform. The contents of this attachment will be written to S3 without any transformation;
 
-<details> 
-<summary>Input metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "filename": {
-      "type": "string",
-      "required": false
-    },
-    "bucketName": {
-      "type": "string",
-      "required": false
-    }
-  }
-}
-```
-</details>
-
-#### Expected output metadata
-
-<details> 
-<summary>Output metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "ETag": {
-      "type": "string",
-      "required": true
-    },
-    "Location": {
-      "type": "string",
-      "required": false
-    },
-    "Key": {
-      "type": "string",
-      "required": true
-    },
-    "Bucket": {
-      "type": "string",
-      "required": true
-    }
-  }
-}
-```
-</details>
+#### Limitations
+* It is not possible to set the File/Object Metadata in S3
+* Files/Objects can not be so large that they can not fit in the memory of the component's docker container.
+* Files/Objects can not be more that 5 GB in size
+* It is not possible to set the AWS S3 Storage Class for written files/objects. They will always be written with the `standard` storage class.
+* It is not possible to set file/object tags
+* It is not possible to compression objects/files (with zip, gzip, etc)
+* It is not possible to encrypt object/files
 
 ### Read file  
 Read file from S3 bucket.
@@ -343,7 +298,6 @@ This action removes file from S3 by provided name in selected bucket. The action
 ```
 </details>
 
-
 ### Rename file
 Rename file in S3 bucket and folder.
 
@@ -428,8 +382,73 @@ The action will emit properties of renamed file.
 ```
 </details>
 
+### Write file
+**Deprecated in favor of [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment)**
+Put stream as file into S3 bucket.
+This action creates or rewrites a new file on S3 with the content that is passed as an input attachment.
+The name of the file would be the same to the attachment name.
+Be careful: this action can process only one attachment - if it would be more or no attachment at all the execution would fail with exception.
+#### List of Expected Config fields
+ - **Default Bucket Name and folder** - name of S3 bucket to write file in (by default, if `bucketName` is not provided in metadata);
+ 
+#### Expected input metadata
+ - **filename** - name of resulted file at S3 bucket (optional);
+ - **bucketName** - name of S3 bucket to write file in (will replace `Default Bucket Name and folder` if provided, the field is optional).
+ 
+![image](https://user-images.githubusercontent.com/40201204/59688384-448b5b80-91e6-11e9-8dd0-e007983055c8.png)
+
+<details> 
+<summary>Input metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "filename": {
+      "type": "string",
+      "required": false
+    },
+    "bucketName": {
+      "type": "string",
+      "required": false
+    }
+  }
+}
+```
+</details>
+
+#### Expected output metadata
+
+<details> 
+<summary>Output metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "ETag": {
+      "type": "string",
+      "required": true
+    },
+    "Location": {
+      "type": "string",
+      "required": false
+    },
+    "Key": {
+      "type": "string",
+      "required": true
+    },
+    "Bucket": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+```
+</details>
+
 ### Stream to CSV
-Action is deprecated. Use `Write file` action instead.
+Action is deprecated. Use the csv & or batch component to create a csv file first, then write that file to S3.
 
 ## Known Limitations
 

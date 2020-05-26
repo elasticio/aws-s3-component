@@ -46,4 +46,9 @@ describe('upsertFile', () => {
     const result = await upsertFile.process.call(self, msg, cfg, {});
     expect(Object.keys(result.body)).to.include('ETag');
   });
+
+  it('should generate metadata', async () => {
+    const metadata = await upsertFile.getMetaModel.call(self, cfg);
+    expect(metadata.in.properties.bucketName.enum).to.include(defaultMsg.body.bucketName);
+  });
 });

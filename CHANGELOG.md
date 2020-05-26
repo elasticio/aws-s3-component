@@ -4,6 +4,8 @@
     * Add Upsert File Action
     * Update dependencies
     * Verify Credentials now checks for access to buckets.
+    * Update to Node v 14
+    * Replace Component completeness matrix to version 2.3
 
 
 # 1.3.1 (May 22, 2020)
