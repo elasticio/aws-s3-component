@@ -1,3 +1,11 @@
+# 1.4.0 (June 5, 2020)
+
+## General Changes
+    * Add Upsert File Action
+    * Update dependencies
+    * Verify Credentials now checks for access to buckets.
+
+
 # 1.3.1 (May 22, 2020)
 
 ## General Changes

@@ -29,7 +29,7 @@
   ],
   "dependencies": {
     "@elastic.io/component-commons-library": "1.1.2",
-    "@elastic.io/oih-standard-library": "1.1.0-pre2",
+    "@elastic.io/oih-standard-library": "1.0.3",
     "aws-sdk": "2.683.0",
     "bunyan": "1.8.12",
     "co": "4.6.0",

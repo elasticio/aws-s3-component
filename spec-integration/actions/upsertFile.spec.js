@@ -18,7 +18,7 @@ const defaultCfg = {
 const defaultMsg = {
   body: {
     bucketName: 'lloyds-dev',
-    fileName: 'some123isin',
+    fileName: 'integration-test/some123isin',
     attachmentUrl: 'https://attachment.url.loc/someof',
   },
 };
@@ -28,7 +28,7 @@ const self = {
   logger,
 };
 
-describe('streamToFile', () => {
+describe('upsertFile', () => {
   let cfg;
   let msg;
 

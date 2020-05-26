@@ -384,7 +384,7 @@
     },
     "upsertFile": {
       "main": "./lib/actions/upsertFile.js",
-      "title": "Upload File to S3 From a Provided Attachment",
+      "title": "Write File to S3 From a Provided Attachment",
       "help": {
         "description": "Given a filename and a URL to an attachment stored in the platform, transfers the contents of the attachment to AWS S3. The component returns a summary of the written file. AWS S3 always overwrites the contents of the file if it already exists.",
         "link": "/components/aws-s3/index.html#upload-file-from-url"
