@@ -1,3 +1,10 @@
+# 1.4.1 (November 12, 2020)
+
+## General Changes
+    * Upgrade to sailor 2.6.18
+    * Annual audit of the component code to check if it exposes a sensitive data in the logs
+    * Annual npm vulnerabilities audit
+
 # 1.4.0 (June 5, 2020)
 
 ## General Changes
