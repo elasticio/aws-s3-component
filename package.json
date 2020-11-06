@@ -34,7 +34,6 @@
     "bunyan": "1.8.12",
     "co": "4.6.0",
     "csv": "5.3.2",
-    "debug": "4.1.1",
     "elasticio-node": "0.0.9",
     "elasticio-sailor-nodejs": "2.6.18",
     "iconv-lite": "0.5.1",
