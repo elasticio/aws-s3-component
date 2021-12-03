@@ -1,6 +1,5 @@
 {
   "name": "amazon-s3-component",
-  "version": "1.4.1",
   "description": "elastic.io integration component that can read and write to AWS S3",
   "homepage": "http://elastic.io",
   "author": {
@@ -35,7 +34,7 @@
     "co": "4.6.0",
     "csv": "5.3.2",
     "elasticio-node": "0.0.9",
-    "elasticio-sailor-nodejs": "2.6.18",
+    "elasticio-sailor-nodejs": "2.6.26",
     "iconv-lite": "0.5.1",
     "lodash": "4.17.20",
     "mime-types": "2.1.27",
