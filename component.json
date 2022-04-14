@@ -133,7 +133,7 @@
             },
             "bucketName": {
               "type": "string",
-              "title":"Bucket Name and folder",
+              "title": "Bucket Name and folder",
               "required": false
             }
           }
@@ -186,7 +186,7 @@
               "required": true
             },
             "bucketName": {
-              "title":"Bucket Name and folder",
+              "title": "Bucket Name and folder",
               "type": "string",
               "required": false
             }
@@ -224,7 +224,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
-              "title":"Bucket Name and folder",
+              "title": "Bucket Name and folder",
               "type": "string",
               "required": false
             }
@@ -266,7 +266,7 @@
               "required": true
             },
             "bucketName": {
-              "title":"Bucket Name and Folder",
+              "title": "Bucket Name and Folder",
               "type": "string",
               "required": false
             }
@@ -295,7 +295,7 @@
           "type": "object",
           "properties": {
             "bucketName": {
-              "title":"Bucket Name",
+              "title": "Bucket Name",
               "type": "string",
               "required": true
             },
