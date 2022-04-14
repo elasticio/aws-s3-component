@@ -1,7 +1,6 @@
 {
   "title": "AWS S3",
   "description": "Integration component that can read and write to AWS S3",
-  "buildType": "docker",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
     "fields": {
