@@ -1,4 +1,4 @@
-# 1.4.2 (April 15, 2022)
+# 1.4.2 (April 22, 2022)
 
 * Update `component-commons-library` to v2.0.2
 * Update `oih-standard-library` to v2.0.2
