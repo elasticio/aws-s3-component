@@ -38,19 +38,18 @@ describe('readFile', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it.only('should read PNG', async () => {
+  it('should read PNG', async () => {
     msg.body = { filename: 'sc.PNG' };
-    await readFile.process.call(self, msg, { ...cfg, bucketName: 'elastic.ilya' }, {});
+    await readFile.process.call(self, msg, cfg, {});
     const result = self.emit.getCall(0).args[1];
-    console.log(result);
-    // const expectedDeclaration = {
-    //   attributes: {
-    //     encoding: 'UTF-8',
-    //     version: '1.0',
-    //   },
-    // };
+    const expectedDeclaration = {
+      attributes: {
+        encoding: 'UTF-8',
+        version: '1.0',
+      },
+    };
 
-    // expect(result.body.declaration).to.deep.equal(expectedDeclaration);
+    expect(result.body.declaration).to.deep.equal(expectedDeclaration);
   });
 
   describe('reads file types other than XML or JSON by using attachmentProcessor', () => {
