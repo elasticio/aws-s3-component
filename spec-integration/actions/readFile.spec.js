@@ -38,8 +38,8 @@ describe('readFile', () => {
 
   afterEach(() => self.emit.resetHistory());
 
-  it('should read PNG', async () => {
-    msg.body = { filename: 'sc.PNG' };
+  it('should read XML', async () => {
+    msg.body = { filename: 'LU0326731121.xml' };
     await readFile.process.call(self, msg, cfg, {});
     const result = self.emit.getCall(0).args[1];
     const expectedDeclaration = {
