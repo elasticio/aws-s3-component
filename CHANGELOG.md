@@ -1,10 +1,15 @@
-# 1.4.2 (April 22, 2022)
+# 1.4.3 (April 22, 2022)
 
 * Update `component-commons-library` to v2.0.2
 * Update `oih-standard-library` to v2.0.2
 * Update `elasticio-sailor-nodejs` to v2.6.27
 * Added component-pusher to circleci
 * Fix dependencies
+
+# 1.4.2 (November 26, 2021)
+
+* Upgrade sailor version to 2.6.26
+* Reduced the size of component icon file
 
 # 1.4.1 (November 12, 2020)
 

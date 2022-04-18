@@ -1,6 +1,5 @@
 {
   "name": "amazon-s3-component",
-  "version": "1.4.1",
   "description": "elastic.io integration component that can read and write to AWS S3",
   "homepage": "http://elastic.io",
   "author": {
