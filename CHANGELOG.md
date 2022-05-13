@@ -1,5 +1,5 @@
-# 2.0.0 (May 20, 2022)
-* Fix message data for`Read file` action according to README
+# 1.5.0 (May 20, 2022)
+* Created new `Read file` action instead of existing due to incorrect output metadata, old one set as deprecated 
 * Fix memory leak for `Read file` action and `Get New and Updated S3 Objects` trigger, also added attachment url in message body to them
 * Default value for environment variable `ATTACHMENT_MAX_SIZE` increased from `10000000` (almost **10** MB) to `104857600` bytes (**100** MB)
 * Implemented additional check attachments size  in `Get New and Updated S3 Objects` trigger
