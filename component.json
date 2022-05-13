@@ -1,6 +1,6 @@
 {
   "title": "AWS S3",
-  "version": "1.4.3",
+  "version": "2.0.0-dev.2",
   "description": "Integration component that can read and write to AWS S3",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
@@ -67,42 +67,7 @@
           "label": "Enable File Attachments"
         }
       },
-      "metadata": {
-        "out": {
-          "type": "object",
-          "properties": {
-            "Key": {
-              "type": "string",
-              "required": true
-            },
-            "LastModified": {
-              "type": "string",
-              "required": true
-            },
-            "ETag": {
-              "type": "string",
-              "required": true
-            },
-            "Size": {
-              "type": "number",
-              "required": true
-            },
-            "StorageClass": {
-              "type": "string",
-              "required": true
-            },
-            "Owner": {
-              "type": "object",
-              "properties": {
-                "ID": {
-                  "type": "string",
-                  "required": true
-                }
-              }
-            }
-          }
-        }
-      }
+      "dynamicMetadata": true
     }
   },
   "actions": {
@@ -197,6 +162,14 @@
           "properties": {
             "filename": {
               "type": "string",
+              "required": true
+            },
+            "attachmentUrl": {
+              "type": "string",
+              "required": true
+            },
+            "size": {
+              "type": "number",
               "required": true
             }
           }

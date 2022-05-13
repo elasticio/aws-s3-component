@@ -27,9 +27,9 @@
     "elasticio-component"
   ],
   "dependencies": {
-    "@elastic.io/component-commons-library": "2.0.2",
+    "@elastic.io/component-commons-library": "2.1.0-dev.6",
     "@elastic.io/oih-standard-library": "2.0.2",
-    "aws-sdk": "2.1114.0",
+    "aws-sdk": "2.1132.0",
     "bunyan": "1.8.12",
     "co": "4.6.0",
     "csv": "5.3.2",
@@ -42,7 +42,7 @@
     "remove-leading-slash": "1.0.1",
     "remove-trailing-slash": "0.1.0",
     "request": "2.88.2",
-    "requestretry": "4.1.1",
+    "requestretry": "7.0.0",
     "s3-upload-stream": "1.0.7",
     "stream": "0.0.2",
     "xml-js": "1.6.11",

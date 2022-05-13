@@ -1,5 +1,11 @@
-# 1.4.3 (April 22, 2022)
+# 2.0.0 (May 20, 2022)
+* Fix message data for`Read file` action according to README
+* Fix memory leak for `Read file` action and `Get New and Updated S3 Objects` trigger, also added attachment url in message body to them
+* Default value for environment variable `ATTACHMENT_MAX_SIZE` increased from `10000000` (almost **10** MB) to `104857600` bytes (**100** MB)
+* Implemented additional check attachments size  in `Get New and Updated S3 Objects` trigger
+* Get rid of vulnerabilities in dependencies
 
+# 1.4.3 (April 22, 2022)
 * Update `component-commons-library` to 2.0.2
 * Update `oih-standard-library` to 2.0.2
 * Update `elasticio-sailor-nodejs` to 2.6.27

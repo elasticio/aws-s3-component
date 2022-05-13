@@ -2,11 +2,12 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const bunyan = require('bunyan');
+const { AttachmentProcessor } = require('@elastic.io/component-commons-library');
 
 process.env.ATTACHMENT_MAX_SIZE = 100000000;
 
 const readFile = require('../../lib/actions/readFile');
-const { BasicAuthRestClient } = require('../../lib/StatelessBasicAuthRestClient');
+// const { BasicAuthRestClient } = require('../../lib/StatelessBasicAuthRestClient');
 require('dotenv').config();
 
 const { expect } = chai;
@@ -55,8 +56,11 @@ describe('readFile', () => {
   describe('reads file types other than XML or JSON by using attachmentProcessor', () => {
     let authClientStub;
     before(() => {
-      authClientStub = sinon.stub(BasicAuthRestClient.prototype, 'makeRequest');
-      authClientStub.returns({ put_url: 'http://api.io/some', get_url: 'http://api.io/some' });
+      authClientStub = sinon.stub(AttachmentProcessor.prototype, 'uploadAttachment');
+      authClientStub.returns({
+        config: { url: 'https://storage/' },
+        data: { objectId: 'objectId' },
+      });
     });
     after(() => authClientStub.restore());
 
@@ -65,12 +69,12 @@ describe('readFile', () => {
       const result = await readFile.process.call(self, msg, cfg, {});
       const expectedAttachment = {
         'Depotumsätze.csv': {
-          url: 'http://api.io/some',
+          url: 'https://storage/objectId?storage_type=maester',
           size: 13911,
           'content-type': 'text/csv',
         },
       };
-      expect(result.body.attachments).to.deep.equal(expectedAttachment);
+      expect(result.attachments).to.deep.equal(expectedAttachment);
     });
 
     it('should read CSV 2', async () => {
@@ -78,12 +82,12 @@ describe('readFile', () => {
       const result = await readFile.process.call(self, msg, cfg, {});
       const expectedAttachment = {
         'result.csv': {
-          url: 'http://api.io/some',
+          url: 'https://storage/objectId?storage_type=maester',
           size: 1316340,
           'content-type': 'text/csv',
         },
       };
-      expect(result.body.attachments).to.deep.equal(expectedAttachment);
+      expect(result.attachments).to.deep.equal(expectedAttachment);
     });
 
     it('should read PNG', async () => {
@@ -91,12 +95,12 @@ describe('readFile', () => {
       const result = await readFile.process.call(self, msg, cfg, {});
       const expectedAttachment = {
         'b_jskob_ok.png': {
-          url: 'http://api.io/some',
+          url: 'https://storage/objectId?storage_type=maester',
           size: 115194,
           'content-type': 'image/png',
         },
       };
-      expect(result.body.attachments).to.deep.equal(expectedAttachment);
+      expect(result.attachments).to.deep.equal(expectedAttachment);
     });
   });
 });
