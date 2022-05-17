@@ -27,7 +27,7 @@
     "elasticio-component"
   ],
   "dependencies": {
-    "@elastic.io/component-commons-library": "2.1.0-dev.6",
+    "@elastic.io/component-commons-library": "2.1.0",
     "@elastic.io/oih-standard-library": "2.0.2",
     "aws-sdk": "2.1132.0",
     "bunyan": "1.8.12",
