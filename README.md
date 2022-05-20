@@ -39,7 +39,7 @@ The component provides ability to connect to Amazon Simple Storage Service (Amaz
 [Completeness Matrix](https://docs.google.com/spreadsheets/d/1sptYGKkInnAbfRRbzLr5oOZUd3-COekQWGKpqQUYVfc/edit#gid=0)
 
 ### How works. SDK version  
-The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version 2.683.0.
+The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version 2.1132.0.
 
 ## Requirements
 
@@ -47,7 +47,7 @@ The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ '
 Name|Mandatory|Description|Values|
 |----|---------|-----------|------|
 |`LOG_LEVEL`| false | Controls logger level | `trace`, `debug`, `info`, `warning`, `error` |
-|`ATTACHMENT_MAX_SIZE`| false | For `elastic.io` attachments configuration. Maximal possible attachment size in bytes. By default set to 1000000 and according to platform limitations CAN'T be bigger than that. | Up to `1000000` bytes|
+|`ATTACHMENT_MAX_SIZE`| false | For `elastic.io` attachments configuration. Maximal possible attachment size in bytes. By default set to `104857600` and according to platform limitations **CAN'T** be bigger than that. | Up to `104857600` bytes (100MB)|
 |`ACCESS_KEY_ID`| false | For integration-tests is required to specify this variable |  |
 |`ACCESS_KEY_SECRET`| false | For integration-tests is required to specify this variable |  |
 |`REGION`  | false | For integration-tests is required to specify this variable |  |
@@ -72,18 +72,27 @@ Triggers to get all new and updated s3 objects since last polling.
 
 #### List of Expected Config fields
  - **Bucket Name and folder** - name of S3 bucket to read files from
- - **Emit Behaviour**: Options are: default is `Emit Individually` emits each object in separate message, `Fetch All` emits all objects in one message
+ - **Emit Behaviour**: Options are: default is `Emit Individually` emits each object in separate message, `Fetch All` emits all objects as array in one object with key `results`
  - **Start Time**: Start datetime of polling. Default min date:`-271821-04-20T00:00:00.000Z`
  - **End Time**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
- - **Enable File Attachments**: If selected, the contents of the file will be exported in addition to the file metadata.
+ - **Enable File Attachments**: If selected, the contents of the file will be exported in addition to the attachment.
+
 
 <details> 
 <summary>Output metadata</summary>
+
+If **Emit Behaviour** selected as `Emit Individually` - emits each object in separate message with schema below, if `Fetch All` emits all objects as array in one object with key `results`, each item regards schema below
+
+`attachmentUrl` appears only if selected **Enable File Attachments**
 
 ```json
 {
   "type": "object",
   "properties": {
+    "attachmentUrl": {
+      "type": "string",
+      "required": true
+    },
     "Key": {
       "type": "string",
       "required": true
@@ -180,6 +189,14 @@ File type resolves by it's extension. The name of attachment would be same to fi
   "properties": {
     "filename": {
       "type": "string",
+      "required": true
+    },
+    "attachmentUrl": {
+      "type": "string",
+      "required": true
+    },
+    "size": {
+      "type": "number",
       "required": true
     }
   }

@@ -1,6 +1,6 @@
 {
   "title": "AWS S3",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "description": "Integration component that can read and write to AWS S3",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
@@ -67,42 +67,7 @@
           "label": "Enable File Attachments"
         }
       },
-      "metadata": {
-        "out": {
-          "type": "object",
-          "properties": {
-            "Key": {
-              "type": "string",
-              "required": true
-            },
-            "LastModified": {
-              "type": "string",
-              "required": true
-            },
-            "ETag": {
-              "type": "string",
-              "required": true
-            },
-            "Size": {
-              "type": "number",
-              "required": true
-            },
-            "StorageClass": {
-              "type": "string",
-              "required": true
-            },
-            "Owner": {
-              "type": "object",
-              "properties": {
-                "ID": {
-                  "type": "string",
-                  "required": true
-                }
-              }
-            }
-          }
-        }
-      }
+      "dynamicMetadata": true
     }
   },
   "actions": {
@@ -162,9 +127,10 @@
       }
     },
     "readFile": {
+      "deprecated": true,
       "title": "Read file",
       "help": {
-        "description": "Read file from S3 bucket",
+        "description": "Action is deprecated do to incorrect output metadata. Use main 'Read file' action instead",
         "link": "/components/aws-s3/index.html#read-file"
       },
       "main": "./lib/actions/readFile.js",
@@ -197,6 +163,56 @@
           "properties": {
             "filename": {
               "type": "string",
+              "required": true
+            }
+          }
+        }
+      }
+    },
+    "readFile2": {
+      "title": "Read file",
+      "help": {
+        "description": "Read file from S3 bucket",
+        "link": "/components/aws-s3/index.html#read-file"
+      },
+      "main": "./lib/actions/readFile2.js",
+      "fields": {
+        "bucketName": {
+          "viewClass": "TextFieldView",
+          "label": "Default Bucket Name and folder",
+          "placeholder": "my-fancy-bucket",
+          "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
+          "required": false
+        }
+      },
+      "metadata": {
+        "in": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
+            },
+            "bucketName": {
+              "title": "Bucket Name and folder",
+              "type": "string",
+              "required": false
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "required": true
+            },
+            "attachmentUrl": {
+              "type": "string",
+              "required": true
+            },
+            "size": {
+              "type": "number",
               "required": true
             }
           }
