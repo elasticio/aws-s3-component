@@ -1,3 +1,6 @@
+# 1.5.1 (May 20, 2022)
+* Fixed bug in `Get New and Updated S3 Objects` trigger when selected Emit Behaviour - Fetch All
+
 # 1.5.0 (May 20, 2022)
 * Created new `Read file` action instead of existing due to incorrect output metadata, old one set as deprecated 
 * Fix memory leak for `Read file` action and `Get New and Updated S3 Objects` trigger, also added attachment url in message body to them
