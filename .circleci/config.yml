@@ -79,13 +79,13 @@ jobs:
           node-version: << pipeline.parameters.node-version >>
       - run:
           name: Audit Dependencies
-          command: npm audit --audit-level=high
+          command: npm audit --production --audit-level=high
       - node/install-packages:
           cache-path: ./node_modules
           override-ci-command: npm install
       - run:
-          name: Running Mocha Unit&Integration Tests
-          command: npm test && npm run integration-test
+          name: Running Mocha Tests
+          command: npm test
   build:
     docker:
       - image: circleci/node:16-stretch

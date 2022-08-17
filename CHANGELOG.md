@@ -1,3 +1,10 @@
+# 1.5.2 (August 26, 2022)
+
+* Update Sailor version to 2.6.29
+* Get rid of vulnerabilities in dependencies
+* Update component-commons-library version to 3.0.1
+* Update oih-standard-library version to 2.0.3
+
 # 1.5.1 (May 20, 2022)
 * Fixed bug in `Get New and Updated S3 Objects` trigger when selected Emit Behaviour - Fetch All
 
