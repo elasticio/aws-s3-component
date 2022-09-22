@@ -1,6 +1,6 @@
 {
   "title": "AWS S3",
-  "version": "1.5.2-dev.1",
+  "version": "1.5.2",
   "description": "Integration component that can read and write to AWS S3",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
