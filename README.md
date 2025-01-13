@@ -468,7 +468,7 @@ Action is deprecated. Use the csv & or batch component to create a csv file firs
 
 ## Known Limitations
 
-1. Maximal possible size for an attachment is 10 MB.
+1. The maximum possible size for an attachment is 100 MB.
 2. Attachments mechanism does not work with [Local Agent Installation](https://support.elastic.io/support/solutions/articles/14000076461-announcing-the-local-agent-)
 
 ## License
