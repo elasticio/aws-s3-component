@@ -1,12 +1,13 @@
-# 1.6.0 (December 08, 2025)
+# 1.6.0 (December 09, 2025)
 
-* Add support for presigned urls fir trigger + Read action
-* Add support for S3 providers
+* Add support for pre-signed URLs in "Read file" action and "Get New and Updated S3 Objects" trigger
+* Add support for S3-compatible providers
 * Update `Sailor` version to 2.7.7
 * Update dev dependencies
+* Update the Node engine to version 24.x
+* Improve `README.md`
 * Update `component-commons-library` version to 4.0.0
 * Remove unused `elasticio-node` dependency
-* Update the Node engine to version 24.x.
 
 # 1.5.2 (September 23, 2022)
 
