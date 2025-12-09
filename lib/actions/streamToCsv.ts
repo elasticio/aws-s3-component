@@ -1,22 +1,18 @@
-/* eslint-disable no-plusplus,no-console,no-use-before-define */
-/* eslint new-cap: [2, {"capIsNewExceptions": ["Q"]}] */
-const Q = require('q');
-const elasticio = require('elasticio-node');
-const AWS = require('aws-sdk');
-const s3Stream = require('s3-upload-stream');
-const csvParser = require('csv');
-const _ = require('lodash');
-
-const { messages } = elasticio;
+import Q from 'q';
+import { stringify } from 'csv-stringify';
+import _ from 'lodash';
+import { PassThrough } from 'stream';
+import { S3Client } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+import { messages } from '../utils/utils';
+import { Credentials, buildS3Config } from '../AwsS3Client';
 
 /**
  * Singleton instance for streaming
  */
-let outStream;
+let outStream: any;
 let counter = 0;
 let fileIndex = 1;
-
-module.exports.process = processAction;
 
 /**
  * This method will be called from elastic.io platform providing following data
@@ -24,33 +20,34 @@ module.exports.process = processAction;
  * @param msg incoming message object that contains ``body`` with payload
  * @param cfg configuration that is account information and configuration field values
  */
-function processAction(msg, cfg) {
+function processAction(msg: any, cfg: Credentials): void {
   const self = this;
 
-  function prepareStreams() {
+  function prepareStreams(): any {
     if (!outStream) {
-      const s3client = new AWS.S3({
-        accessKeyId: cfg.accessKeyId,
-        secretAccessKey: cfg.accessKeySecret,
-        region: cfg.region,
-      });
-      const streamClient = s3Stream(s3client);
-      const csv = cfg.csv || {};
-      const columnConfig = csv.columns || [];
+      const s3client = new S3Client(buildS3Config(cfg));
+      const csvConfig = cfg.csv || {};
+      const columnConfig = csvConfig.columns || [];
       if (columnConfig.length === 0) {
         throw new Error('Columns can not be empty');
       }
-      const columns = {};
+      const columns: { [key: string]: string } = {};
       _.map(columnConfig, (column) => {
         columns[column.property] = column.title;
       });
-      const stringifier = csvParser.stringify({ header: true, columns });
-      const upload = streamClient.upload({
-        Bucket: cfg.bucketName,
-        Key: `${cfg.keyName + fileIndex}.csv`,
-        ContentType: 'text/csv',
+      const stringifier = stringify({ header: true, columns });
+      const passThrough = new PassThrough();
+      const upload = new Upload({
+        client: s3client,
+        params: {
+          Bucket: cfg.bucketName,
+          Key: `${cfg.keyName + fileIndex}.csv`,
+          ContentType: 'text/csv',
+          Body: passThrough,
+        },
       });
-      stringifier.pipe(upload);
+      upload.done().catch((err) => self.emit('error', err));
+      stringifier.pipe(passThrough);
       outStream = stringifier;
       // Register shutdown hook
       process.on('exit', () => {
@@ -62,29 +59,31 @@ function processAction(msg, cfg) {
     return outStream;
   }
 
-  function writeData(stream) {
+  function writeData(stream: any): void {
     stream.write(msg.body);
     counter++;
     if (counter >= 10000) {
       self.logger.info('Flushing the log file');
-      outStream.end();
+      if (outStream) {
+        outStream.end();
+      }
       outStream = null;
       counter = 0;
       fileIndex++;
     }
   }
 
-  function emitData() {
+  function emitData(): void {
     const data = messages.newMessageWithBody(msg.body);
     self.emit('data', data);
   }
 
-  function emitError(e) {
+  function emitError(e: Error): void {
     self.logger.error('Oops! Error occurred!');
     self.emit('error', e);
   }
 
-  function emitEnd() {
+  function emitEnd(): void {
     self.logger.info('Finished execution');
     self.emit('end');
   }
@@ -93,3 +92,5 @@ function processAction(msg, cfg) {
     .fail(emitError)
     .done(emitEnd);
 }
+
+export { processAction as process };

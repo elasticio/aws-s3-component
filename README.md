@@ -5,7 +5,7 @@
    * [Description](#description)
    * [Purpose](#purpose)
    * [Completeness Matrix](#completeness-matrix)
-   * [How works. SDK version](#how-works-sdk-version)
+   * [How It Works. SDK Version](#how-it-works-sdk-version)
 * [Requirements](#requirements)
    * [Environment variables](#environment-variables)
 * [Credentials](#credentials)
@@ -20,69 +20,88 @@
    * [Get filenames](#get-filenames)
    * [Delete file](#delete-file)
    * [Rename file](#rename-file)
+* [Deprecated Actions](#deprecated-actions)
    * [Write file](#write-file)
    * [Stream to CSV](#stream-to-csv)
 * [Known Limitations](#known-limitations)
 * [License](#license)
 
 ## General information  
-AWS S3 component for the [elastic.io platform](http://www.elastic.io 'elastic.io platform')
+
+This component provides integration capabilities for Amazon Simple Storage Service (Amazon S3), enabling you to interact with S3 buckets and objects through a standardized interface.
+
 ### Description  
-This is the component for working with AWS S3 object storage service on [elastic.io platform](http://www.elastic.io/ "elastic.io platform").
+
+This component enables interaction with Amazon Simple Storage Service (Amazon S3) object storage. It supports common S3 operations including reading, writing, deleting, and renaming files, as well as listing bucket contents and polling for new or updated objects.
 
 ### Purpose  
-The component provides ability to connect to Amazon Simple Storage Service (Amazon S3) object storage service.
+
+The component simplifies integration with Amazon S3 by providing a unified interface for common storage operations, file management, and object monitoring tasks without requiring direct AWS SDK implementation.
 
 ### Completeness Matrix
+
 ![Completeness Matrix](https://user-images.githubusercontent.com/5710732/82918058-312e5780-9f42-11ea-9f80-9eb6cc9aed35.png)
 
 [Completeness Matrix](https://docs.google.com/spreadsheets/d/1sptYGKkInnAbfRRbzLr5oOZUd3-COekQWGKpqQUYVfc/edit#gid=0)
 
-### How works. SDK version  
-The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version 2.1132.0.
+### How It Works. SDK Version  
+
+The component is based on [AWS S3 SDK](https://aws.amazon.com/sdk-for-node-js/ 'SDK for NodeJS') version `3.947.0`.
 
 ## Requirements
 
-#### Environment variables
+### Environment variables
+
+The following environment variables can be configured:
+
 Name|Mandatory|Description|Values|
 |----|---------|-----------|------|
-|`ATTACHMENT_MAX_SIZE`| false | For `elastic.io` attachments configuration. Maximal possible attachment size in bytes. By default set to `104857600` and according to platform limitations **CAN'T** be bigger than that. | Up to `104857600` bytes (100MB)|
-|`ACCESS_KEY_ID`| false | For integration-tests is required to specify this variable |  |
-|`ACCESS_KEY_SECRET`| false | For integration-tests is required to specify this variable |  |
-|`REGION`  | false | For integration-tests is required to specify this variable |  |
+|`ATTACHMENT_MAX_SIZE`| false | For `elastic.io` attachments configuration. Maximum possible attachment size in bytes. By default set to `104857600` and according to platform limitations **CAN'T** be bigger than that. | Up to `104857600` bytes (100MB)|
+|`ACCESS_KEY_ID`| false | This variable is required for integration-tests |  |
+|`ACCESS_KEY_SECRET`| false | This variable is required for integration-tests |  |
+|`REGION`| false | This variable is required for integration-tests |  |
 
 ## Credentials
-Access keys consist of three parts: an access key ID, a secret access key and a region.  
-Like a user name and password, you must use both the access key ID and secret access key together to authenticate your requests.
-According to [AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro) for buckets created in Regions launched after March 20, 2019 `Region` is required for AWS credential.
-### Access Key Id
-An access key ID (for example, `AKIAIOSFODNN7EXAMPLE`).
 
-### Secret Access Key
-A secret access key (for example, `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`).
+Access keys consist of three parts: an access key ID, a secret access key, and a region. Like a user name and password, you must use both the access key ID and secret access key together to authenticate your requests.
 
-### Region
-Example: `ca-central-1`.
+According to [AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro), for buckets created in Regions launched after March 20, 2019, `Region` is required for AWS credentials.
 
+* **Access Key Id** (string, required) – An access key ID (for example, `AKIAIOSFODNN7EXAMPLE`).
+* **Secret Access Key** (string, required) – A secret access key (for example, `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`).
+* **Region** (string, required) – AWS region where your S3 bucket is located (for example, `ca-central-1`).
+* **Custom Endpoint** (string, optional) – Set this when using an S3-compatible provider (for example MinIO, DigitalOcean Spaces, Backblaze B2). Example: `https://s3.eu-central-003.backblazeb2.com`.
+* **Force Path Style** (boolean, optional) - If your provider requires path-style access, enable this option.
 
 ## Triggers
+
 ### Get New and Updated S3 Objects
-Triggers to get all new and updated s3 objects since last polling.
 
-#### List of Expected Config fields
- - **Bucket Name and folder** - name of S3 bucket to read files from
- - **Emit Behaviour**: Options are: default is `Emit Individually` emits each object in separate message, `Fetch All` emits all objects as array in one object with key `results`
- - **Start Time**: Start datetime of polling. Default min date:`-271821-04-20T00:00:00.000Z`
- - **End Time**: End datetime of polling. Default max date: `+275760-09-13T00:00:00.000Z`
- - **Enable File Attachments**: If selected, the contents of the file will be exported in addition to the attachment.
+Polls S3 for all new and updated objects since the last polling. Results can be emitted individually or as an array.
 
+#### Configuration Fields
+
+* **Bucket Name and folder** (string, required) – Name of S3 bucket to read files from.
+* **Emit Behaviour** (dropdown, optional, default `Emit Individually`) – Choose how objects are emitted:
+  * `Emit Individually` – Emits each object in a separate message (default).
+  * `Fetch All` – Emits all objects as an array in one object with key `results`.
+* **Start Time** (string, optional) – Start datetime of polling. Default: `-271821-04-20T00:00:00.000Z`.
+* **End Time** (string, optional) – End datetime of polling. Default: `+275760-09-13T00:00:00.000Z`.
+* **Enable File Attachments** (boolean, optional) – If selected, the contents of the file will be exported as an attachment in addition to the metadata.
+* **Use Pre-signed URLs** (boolean, optional) – Generate pre-signed URLs instead of attachments. Works with files of any size. URLs expire after specified time.
+* **Pre-signed URL Expiration** (number, optional) – URL expiration time in seconds. Default: `3600` (1 hour), Max: `604800` (7 days).
+
+#### Output Metadata
+
+The output structure depends on the selected **Emit Behaviour**:
+
+* **Emit Individually**: Each output message contains a single object with the schema below.
+* **Fetch All**: Each output message contains an object with key `results` containing an array of objects, each following the schema below.
+
+`attachmentUrl` or `preSignedUrl` appears only if **Enable File Attachments** is selected. `preSignedUrl` is used when **Use Pre-signed URLs** is enabled, otherwise `attachmentUrl` is used.
 
 <details> 
 <summary>Output metadata</summary>
-
-If **Emit Behaviour** selected as `Emit Individually` - emits each object in separate message with schema below, if `Fetch All` emits all objects as array in one object with key `results`, each item regards schema below
-
-`attachmentUrl` appears only if selected **Enable File Attachments**
 
 ```json
 {
@@ -90,7 +109,11 @@ If **Emit Behaviour** selected as `Emit Individually` - emits each object in sep
   "properties": {
     "attachmentUrl": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+    "preSignedUrl": {
+      "type": "string",
+      "required": false
     },
     "Key": {
       "type": "string",
@@ -127,35 +150,56 @@ If **Emit Behaviour** selected as `Emit Individually` - emits each object in sep
 </details>
 
 ## Actions
+
 ### Write File to S3 From a Provided Attachment
+
 Given a filename and a URL to an attachment stored in the platform, transfers the contents of the attachment to AWS S3. The component returns a summary of the written file. AWS S3 always overwrites the contents of the file if it already exists.
- 
-#### Expected input metadata
- - **bucketName** - name of S3 bucket to write the file to; Sufficient write permission is required;
- - **fileName** - Name of file/S3 object to write. Use `/` characters in the filename to create folders;
- - **attachmentUrl** - Url to the attachment stored in the platform. The contents of this attachment will be written to S3 without any transformation;
+
+#### Configuration Fields
+
+None.
+
+#### Input Metadata
+
+* **bucketName** (string, required) – Name of S3 bucket to write the file to. Sufficient write permission is required.
+* **fileName** (string, required) – Name of the file/S3 object to write. Use `/` characters in the filename to create folders.
+* **attachmentUrl** (string, required) – URL to the attachment stored in the platform. The contents of this attachment will be written to S3 without any transformation.
+
+#### Output Metadata
+
+Returns a summary object with the following properties:
+
+* **ETag** (string, required) – Entity tag for the uploaded object.
+* **Location** (string, optional) – URL of the uploaded object.
+* **Key** (string, required) – Key (filename) of the uploaded object.
+* **Bucket** (string, required) – Name of the bucket where the file was written.
 
 #### Limitations
-* It is not possible to set the File/Object Metadata in S3
-* Files/Objects can not be so large that they can not fit in the memory of the component's docker container.
-* Files/Objects can not be more that 5 GB in size
+
+* It is not possible to set file or object metadata in S3.
+* Files/Objects cannot be larger than the memory available in the component's docker container.
+* Files/Objects cannot be more than 5 GB in size.
 * It is not possible to set the AWS S3 Storage Class for written files/objects. They will always be written with the `standard` storage class.
-* It is not possible to set file/object tags
-* It is not possible to compression objects/files (with zip, gzip, etc)
-* It is not possible to encrypt object/files
+* It is not possible to set file/object tags.
+* It is not possible to compress objects/files (with zip, gzip, etc.).
+* It is not possible to encrypt objects/files.
 
-### Read file  
-Read file from S3 bucket.
-This action reads file from S3 bucket by provided name. The result is storing in the output body (for json or xml) or in the output attachment (for other types).
-File type resolves by it's extension. The name of attachment would be same to filename.
+### Read file
 
-#### List of Expected Config fields
- - **Default Bucket Name and folder** - name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata);
- 
-#### Expected input metadata
- - **filename** - name of file at S3 bucket to read;
- - **bucketName** - name of S3 bucket to read file from (will replace `Default Bucket Name and folder` if provided, the field is optional).
-![image](https://user-images.githubusercontent.com/40201204/59688635-ced3bf80-91e6-11e9-8c17-a172a1dadce2.png)
+Reads a file from an S3 bucket. The result is stored in the output body (for JSON or XML) or in the output attachment (for other types). File type is resolved by its extension. The name of the attachment will be the same as the filename.
+
+**Pre-signed URLs**: When enabled, generates pre-signed URLs instead of attachments. This allows working with files of any size without the 100MB attachment limit. URLs expire after the specified time (default: 1 hour, max: 7 days).
+
+#### Configuration Fields
+
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata).
+* **Use Pre-signed URLs** (boolean, optional) – Generate pre-signed URLs instead of attachments. Works with files of any size.
+* **Pre-signed URL Expiration** (number, optional) – URL expiration time in seconds. Default: `3600` (1 hour), Max: `604800` (7 days).
+
+#### Input Metadata
+
+* **filename** (string, required) – Name of the file in the S3 bucket to read.
+* **bucketName** (string, optional) – Name of S3 bucket to read file from (will replace `Default Bucket Name and folder` if provided).
 
 <details> 
 <summary>Input metadata</summary>
@@ -177,7 +221,7 @@ File type resolves by it's extension. The name of attachment would be same to fi
 ```
 </details>
 
-#### Expected output metadata
+#### Output Metadata
 
 <details> 
 <summary>Output metadata</summary>
@@ -192,7 +236,11 @@ File type resolves by it's extension. The name of attachment would be same to fi
     },
     "attachmentUrl": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+    "preSignedUrl": {
+      "type": "string",
+      "required": false
     },
     "size": {
       "type": "number",
@@ -201,21 +249,24 @@ File type resolves by it's extension. The name of attachment would be same to fi
   }
 }
 ```
+
+**Note**: `attachmentUrl` is returned when pre-signed URLs are disabled, `preSignedUrl` is returned when pre-signed URLs are enabled. Only one will be present in the output.
 </details>
 
 ### Get filenames
-Emit individually all filenames from S3 bucket.
-This action gets all names of files which are storing in S3 bucket with provided name. 
-The filenames emits individually.
 
-**Notice**: if you provide bucket and folder (as example `eio-dev/inbound`), not only all names of files will  return but name of root folder (`inbound/') as well.
+Retrieves all filenames from an S3 bucket and emits them individually. This action gets all names of files which are stored in the S3 bucket with the provided name.
 
-#### List of Expected Config fields
- - **Default Bucket Name and folder** - name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata);
+**Notice**: If you provide bucket and folder (as an example `eio-dev/inbound`), not only all names of files will be returned but the name of the root folder (`inbound/`) as well.
 
-#### Expected input metadata
- - **bucketName** - name of S3 bucket to write file from (will replace `Default Bucket Name and folder` if provided, the field is optional).
-![image](https://user-images.githubusercontent.com/40201204/59688813-1fe3b380-91e7-11e9-8f54-a90b2b601eea.png)
+#### Configuration Fields
+
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata).
+
+#### Input Metadata
+
+* **bucketName** (string, optional) – Name of S3 bucket to read file from (will replace `Default Bucket Name and folder` if provided).
+
 <details> 
 <summary>Input metadata</summary>
 
@@ -232,7 +283,7 @@ The filenames emits individually.
 ```
 </details>
 
-#### Expected output metadata
+#### Output Metadata
 
 <details> 
 <summary>Output metadata</summary>
@@ -262,19 +313,22 @@ The filenames emits individually.
 ```
 </details>
 
-#### Known limitations
-It is possible to retrieve maximum 1000 file names.
+#### Known Limitations
+
+A maximum of 1000 file names can be retrieved.
 
 ### Delete file
-Delete file from S3 bucket.
 
-This action removes file from S3 by provided name in selected bucket. The action will emit single filename of removed file.
-#### List of Expected Config fields
- - **Default Bucket Name and folder** - name of S3 bucket to delete file from (by default, if `bucketName` is not provided);
-#### Expected input metadata
- - **filename** - name of file at S3 bucket to delete;
- - **bucketName** - name of S3 bucket and folder to delete file from (will replace `Default Bucket Name and folder` if provided, the field is optional).
-![image](https://user-images.githubusercontent.com/40201204/59688635-ced3bf80-91e6-11e9-8c17-a172a1dadce2.png)
+Removes a file from an S3 bucket by the provided name in the selected bucket. The action will emit the single filename of the removed file.
+
+#### Configuration Fields
+
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to delete file from (by default, if `bucketName` is not provided).
+
+#### Input Metadata
+
+* **filename** (string, required) – Name of the file in the S3 bucket to delete.
+* **bucketName** (string, optional) – Name of S3 bucket and folder to delete file from (will replace `Default Bucket Name and folder` if provided).
 
 <details> 
 <summary>Input metadata</summary>
@@ -296,7 +350,7 @@ This action removes file from S3 by provided name in selected bucket. The action
 ```
 </details>
 
-#### Expected output metadata
+#### Output Metadata
 
 <details> 
 <summary>Output metadata</summary>
@@ -315,15 +369,19 @@ This action removes file from S3 by provided name in selected bucket. The action
 </details>
 
 ### Rename file
-Rename file in S3 bucket and folder.
 
-This action renames file by provided name in selected bucket and folder.
-The action will emit properties of renamed file.
-#### Expected input metadata
- - **bucketName** - name of S3 bucket where file is placed
- - **folder** - name of folder where file is placed (can be omitted)
- - **oldFileName** - name of file that should be renamed
- - **newFileName** - new name of file
+Renames a file in an S3 bucket and folder. The action will emit properties of the renamed file.
+
+#### Configuration Fields
+
+None.
+
+#### Input Metadata
+
+* **bucketName** (string, required) – Name of S3 bucket where file is placed.
+* **folder** (string, optional) – Name of folder where file is placed (can be omitted).
+* **oldFileName** (string, required) – Name of the file that should be renamed.
+* **newFileName** (string, required) – New name of the file.
 
 <details> 
 <summary>Input metadata</summary>
@@ -354,7 +412,7 @@ The action will emit properties of renamed file.
 ```
 </details>
 
-#### Expected output metadata
+#### Output Metadata
 
 <details> 
 <summary>Output metadata</summary>
@@ -398,20 +456,26 @@ The action will emit properties of renamed file.
 ```
 </details>
 
+## Deprecated Actions
+
+The following actions are deprecated and should not be used in new integrations. They are maintained for backward compatibility with existing flows.
+
 ### Write file
-**Deprecated in favor of [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment)**
-Put stream as file into S3 bucket.
-This action creates or rewrites a new file on S3 with the content that is passed as an input attachment.
-The name of the file would be the same to the attachment name.
-Be careful: this action can process only one attachment - if it would be more or no attachment at all the execution would fail with exception.
-#### List of Expected Config fields
- - **Default Bucket Name and folder** - name of S3 bucket to write file in (by default, if `bucketName` is not provided in metadata);
- 
-#### Expected input metadata
- - **filename** - name of resulted file at S3 bucket (optional);
- - **bucketName** - name of S3 bucket to write file in (will replace `Default Bucket Name and folder` if provided, the field is optional).
- 
-![image](https://user-images.githubusercontent.com/40201204/59688384-448b5b80-91e6-11e9-8dd0-e007983055c8.png)
+
+⚠️ **Deprecated** in favor of [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment).
+
+Puts a stream as a file into an S3 bucket. This action creates or rewrites a new file on S3 with the content that is passed as an input attachment. The name of the file will be the same as the attachment name.
+
+**Important**: This action can process only one attachment. If there are more attachments or no attachment at all, the execution will fail with an exception.
+
+#### Configuration Fields
+
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to write file in (by default, if `bucketName` is not provided in metadata).
+
+#### Input Metadata
+
+* **filename** (string, optional) – Name of the resulting file in the S3 bucket.
+* **bucketName** (string, optional) – Name of S3 bucket to write file in (will replace `Default Bucket Name and folder` if provided).
 
 <details> 
 <summary>Input metadata</summary>
@@ -433,7 +497,7 @@ Be careful: this action can process only one attachment - if it would be more or
 ```
 </details>
 
-#### Expected output metadata
+#### Output Metadata
 
 <details> 
 <summary>Output metadata</summary>
@@ -464,7 +528,8 @@ Be careful: this action can process only one attachment - if it would be more or
 </details>
 
 ### Stream to CSV
-Action is deprecated. Use the csv & or batch component to create a csv file first, then write that file to S3.
+
+⚠️ **Deprecated**. Use the CSV or batch component to create a CSV file first, then write that file to S3 using the [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment) action.
 
 ## Known Limitations
 
@@ -474,6 +539,3 @@ Action is deprecated. Use the csv & or batch component to create a csv file firs
 ## License
 
 Apache-2.0 © [elastic.io GmbH](http://elastic.io)
-
-[daviddm-image]: https://david-dm.org/elasticio/aws-s3-component.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/elasticio/aws-s3-component
