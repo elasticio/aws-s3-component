@@ -90,10 +90,18 @@ export class AwsS3Polling {
   private getStartTime(cfg: any, snapshot: any): Date {
     const MIN_DATE = new Date(0); // Epoch start
     if (snapshot?.startTime) {
-      return new Date(snapshot.startTime);
+      const date = new Date(snapshot.startTime);
+      if (Number.isNaN(date.getTime())) {
+        throw new Error('Invalid "Start Time" value');
+      }
+      return date;
     }
     if (cfg.startTime) {
-      return new Date(cfg.startTime);
+      const date = new Date(cfg.startTime);
+      if (Number.isNaN(date.getTime())) {
+        throw new Error('Invalid "Start Time" value');
+      }
+      return date;
     }
     return MIN_DATE;
   }
@@ -107,6 +115,9 @@ export class AwsS3Polling {
       return timeStampFlowRun;
     }
     const cfgDate = new Date(cfg.endTime);
+    if (Number.isNaN(cfgDate.getTime())) {
+      throw new Error('Invalid "End Time" value');
+    }
     return cfgDate < timeStampFlowRun ? cfgDate : timeStampFlowRun;
   }
 
