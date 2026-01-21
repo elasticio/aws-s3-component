@@ -1,6 +1,6 @@
 {
   "title": "AWS S3",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "Integration component that can read and write to AWS S3",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
@@ -19,6 +19,18 @@
         "label": "Region",
         "required": true,
         "viewClass": "TextFieldView"
+      },
+      "endpoint": {
+        "label": "Custom Endpoint (optional)",
+        "required": false,
+        "viewClass": "TextFieldView",
+        "note": "Set for S3-compatible providers (e.g. https://s3.eu-central-003.backblazeb2.com)"
+      },
+      "s3ForcePathStyle": {
+        "label": "Force Path Style",
+        "required": false,
+        "viewClass": "CheckBoxView",
+        "note": "Enable for most S3-compatible providers (MinIO, Wasabi, etc.)"
       }
     }
   },
@@ -65,6 +77,18 @@
         "enableFileAttachments": {
           "viewClass": "CheckBoxView",
           "label": "Enable File Attachments"
+        },
+        "usePreSignedUrls": {
+          "viewClass": "CheckBoxView",
+          "label": "Use Pre-signed URLs",
+          "note": "Generate pre-signed URLs instead of attachments.. Works with files of any size. URLs expire after specified time."
+        },
+        "preSignedUrlExpiration": {
+          "viewClass": "TextFieldView",
+          "label": "Pre-signed URL Expiration (seconds)",
+          "placeholder": "3600",
+          "note": "URL expiration time in seconds. Default: 3600 (1 hour), Max: 604800 (7 days)",
+          "required": false
         }
       },
       "dynamicMetadata": true
@@ -183,6 +207,19 @@
           "placeholder": "my-fancy-bucket",
           "note": "Default Bucket Name and folder will override if 'Bucket Name and folder' field is set in metadata",
           "required": false
+        },
+        "usePreSignedUrls": {
+          "viewClass": "CheckBoxView",
+          "required": false,
+          "label": "Use Pre-signed URLs",
+          "note": "Generate pre-signed URLs instead of attachments. Works with files of any size. URLs expire after specified time."
+        },
+        "preSignedUrlExpiration": {
+          "viewClass": "TextFieldView",
+          "label": "Pre-signed URL Expiration (seconds)",
+          "placeholder": "3600",
+          "note": "URL expiration time in seconds. Default: 3600 (1 hour), Max: 604800 (7 days)",
+          "required": false
         }
       },
       "metadata": {
@@ -209,7 +246,11 @@
             },
             "attachmentUrl": {
               "type": "string",
-              "required": true
+              "required": false
+            },
+            "preSignedUrl": {
+              "type": "string",
+              "required": false
             },
             "size": {
               "type": "number",

@@ -1,3 +1,15 @@
+# 1.6.0 (January 21, 2026)
+
+* Add support for pre-signed URLs in "Read file" action and "Get New and Updated S3 Objects" trigger
+* Add support for S3-compatible providers
+* Migrate to AWS SDK v3 (modular `@aws-sdk/*` packages)
+* Update `Sailor` version to 2.7.7
+* Update dev dependencies
+* Update the Node engine to version 24.x
+* Improve `README.md`
+* Update `component-commons-library` version to 4.0.0
+* Remove unused `elasticio-node` dependency
+
 # 1.5.2 (September 23, 2022)
 
 * Update Sailor version to 2.6.29
