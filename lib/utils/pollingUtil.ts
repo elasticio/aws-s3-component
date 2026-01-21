@@ -9,6 +9,8 @@ import * as params from '../parameters';
  * This replaces the dependency on @elastic.io/oih-standard-library/lib/triggers/getNewAndUpdated
  * while maintaining backwards compatibility.
  */
+const isDebugFlow = process.env.ELASTICIO_FLOW_TYPE === 'debug';
+
 export class AwsS3Polling {
   private client: AwsS3Client;
 
@@ -42,13 +44,22 @@ export class AwsS3Polling {
 
       this.logger.debug('Polling with startTime: %s, endTime: %s', startTime, endTime);
 
+      if (startTime >= endTime) {
+        this.logger.warn('Start Time (%s) must be before End Time (%s). No objects will be returned.', startTime, endTime);
+      }
+
       switch (emitBehaviour) {
         case 'emitIndividually': {
           this.logger.debug('Start object polling');
           const result = await this.getObjects({ startTime, endTime });
           this.logger.debug('Finish object polling');
           if (result === undefined || result === null || result.length === 0) {
-            this.logger.debug('No new or updated objects was found');
+            this.logger.info('No new or updated objects found in the specified time range (Start: %s, End: %s)', startTime.toISOString(), endTime.toISOString());
+            if (isDebugFlow) {
+              throw new Error(`No object found. Execution stopped.
+              This error is only applicable to the Retrieve Sample.
+              In flow executions there will be no error, just an execution skip.`);
+            }
             break;
           }
           // Update snapshot startTime before emitting
@@ -61,7 +72,12 @@ export class AwsS3Polling {
           const result = await this.getObjects({ startTime, endTime });
           this.logger.debug('Finish object polling');
           if (result === undefined || result === null || result.length === 0) {
-            this.logger.debug('No new or updated objects was found');
+            this.logger.info('No new or updated objects found in the specified time range (Start: %s, End: %s)', startTime.toISOString(), endTime.toISOString());
+            if (isDebugFlow) {
+              throw new Error(`No object found. Execution stopped.
+              This error is only applicable to the Retrieve Sample.
+              In flow executions there will be no error, just an execution skip.`);
+            }
             break;
           }
           // Update snapshot startTime before emitting
@@ -130,6 +146,7 @@ export class AwsS3Polling {
   }
 
   async getObjects({ startTime, endTime }: { startTime: Date; endTime: Date }): Promise<S3Object[]> {
+    this.logger.debug('Fetching objects from bucket with time range: startTime=%s, endTime=%s', startTime.toISOString(), endTime.toISOString());
     const fileList = await this.client.listObjects(createAWSInputs(this.cfg.bucketName));
 
     return fileList

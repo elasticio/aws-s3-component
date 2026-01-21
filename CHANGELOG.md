@@ -1,4 +1,4 @@
-# 1.6.0 (December 09, 2025)
+# 1.6.0 (January 21, 2026)
 
 * Add support for pre-signed URLs in "Read file" action and "Get New and Updated S3 Objects" trigger
 * Add support for S3-compatible providers
