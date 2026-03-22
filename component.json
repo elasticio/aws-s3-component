@@ -450,11 +450,10 @@
       "dynamicMetadata": true
     },
     "listObjects": {
-      "title": "Get New and Updated S3 Objects",
-      "type": "polling",
+      "title": "List S3 Objects",
       "help": {
         "description": "List S3 Objects",
-        "link": "/components/aws-s3/index.html#get-new-and-updated-s3-objects"
+        "link": "/components/aws-s3/index.html#list-s3-objects"
       },
       "main": "./lib/actions/listObjects.js",
       "fields": {
