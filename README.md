@@ -15,14 +15,15 @@
 * [Triggers](#triggers)
    * [Get New and Updated S3 Objects](#get-new-and-updated-s3-objects)
 * [Actions](#actions)
-   * [Write File to S3 From a Provided Attachment](#write-file-to-s3-from-a-provided-attachment)
-   * [Read file](#read-file)
-   * [Get filenames](#get-filenames)
    * [Delete file](#delete-file)
+   * [Get filenames](#get-filenames)
+   * [List S3 Objects](#list-s3-objects)
+   * [Read file](#read-file)
    * [Rename file](#rename-file)
+   * [Write File to S3 From a Provided Attachment](#write-file-to-s3-from-a-provided-attachment)
 * [Deprecated Actions](#deprecated-actions)
-   * [Write file](#write-file)
    * [Stream to CSV](#stream-to-csv)
+   * [Write file](#write-file)
 * [Known Limitations](#known-limitations)
 * [License](#license)
 
@@ -151,38 +152,170 @@ The output structure depends on the selected **Emit Behaviour**:
 
 ## Actions
 
-### Write File to S3 From a Provided Attachment
+### Delete file
 
-Given a filename and a URL to an attachment stored in the platform, transfers the contents of the attachment to AWS S3. The component returns a summary of the written file. AWS S3 always overwrites the contents of the file if it already exists.
+Removes a file from an S3 bucket by the provided name in the selected bucket. The action will emit the single filename of the removed file.
 
 #### Configuration Fields
 
-None.
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to delete file from (by default, if `bucketName` is not provided).
 
 #### Input Metadata
 
-* **bucketName** (string, required) – Name of S3 bucket to write the file to. Sufficient write permission is required.
-* **fileName** (string, required) – Name of the file/S3 object to write. Use `/` characters in the filename to create folders.
-* **attachmentUrl** (string, required) – URL to the attachment stored in the platform. The contents of this attachment will be written to S3 without any transformation.
+* **filename** (string, required) – Name of the file in the S3 bucket to delete.
+* **bucketName** (string, optional) – Name of S3 bucket and folder to delete file from (will replace `Default Bucket Name and folder` if provided).
+
+<details> 
+<summary>Input metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "filename": {
+      "type": "string",
+      "required": true
+    },
+    "bucketName": {
+      "type": "string",
+      "required": false
+    }
+  }
+}
+```
+</details>
 
 #### Output Metadata
 
-Returns a summary object with the following properties:
+<details> 
+<summary>Output metadata</summary>
 
-* **ETag** (string, required) – Entity tag for the uploaded object.
-* **Location** (string, optional) – URL of the uploaded object.
-* **Key** (string, required) – Key (filename) of the uploaded object.
-* **Bucket** (string, required) – Name of the bucket where the file was written.
+```json
+{
+  "type": "object",
+  "properties": {
+    "filename": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+```
+</details>
 
-#### Limitations
+### Get filenames
 
-* It is not possible to set file or object metadata in S3.
-* Files/Objects cannot be larger than the memory available in the component's docker container.
-* Files/Objects cannot be more than 5 GB in size.
-* It is not possible to set the AWS S3 Storage Class for written files/objects. They will always be written with the `standard` storage class.
-* It is not possible to set file/object tags.
-* It is not possible to compress objects/files (with zip, gzip, etc.).
-* It is not possible to encrypt objects/files.
+Retrieves all filenames from an S3 bucket and emits them individually. This action gets all names of files which are stored in the S3 bucket with the provided name.
+
+**Notice**: If you provide bucket and folder (as an example `eio-dev/inbound`), not only all names of files will be returned but the name of the root folder (`inbound/`) as well.
+
+#### Configuration Fields
+
+* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata).
+
+#### Input Metadata
+
+* **bucketName** (string, optional) – Name of S3 bucket to read file from (will replace `Default Bucket Name and folder` if provided).
+
+<details> 
+<summary>Input metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "bucketName": {
+      "type": "string",
+      "required": false
+    }
+  }
+}
+```
+</details>
+
+#### Output Metadata
+
+<details> 
+<summary>Output metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "ETag": {
+      "type": "string",
+      "required": true
+    },
+    "Location": {
+      "type": "string",
+      "required": false
+    },
+    "Key": {
+      "type": "string",
+      "required": true
+    },
+    "Bucket": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+```
+</details>
+
+#### Known Limitations
+
+A maximum of 1000 file names can be retrieved.
+
+### List S3 Objects
+
+Lists files from an Amazon S3 Bucket matching a specific regular expression pattern. This action utilizes the same underlying listing mechanisms used in the standard triggers but allows filtering objects by the `keyRegex` field and optionally outputs them via their pre-signed URLs.
+
+#### Configuration Fields
+
+* **Bucket Name and Folder** (string, required) – Name of S3 bucket to list files from.
+
+#### Input Metadata
+
+* **keyRegex** (string, required) – A regular expression pattern used to match keys returned from the bucket. To match all files, you can use `.*`.
+
+<details> 
+<summary>Input metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "keyRegex": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+```
+</details>
+
+#### Output Metadata
+
+<details> 
+<summary>Output metadata</summary>
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "Key": {
+      "type": "string",
+      "required": true
+    },
+    "SignedUrl": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+```
+</details>
 
 ### Read file
 
@@ -251,121 +384,6 @@ Reads a file from an S3 bucket. The result is stored in the output body (for JSO
 ```
 
 **Note**: `attachmentUrl` is returned when pre-signed URLs are disabled, `preSignedUrl` is returned when pre-signed URLs are enabled. Only one will be present in the output.
-</details>
-
-### Get filenames
-
-Retrieves all filenames from an S3 bucket and emits them individually. This action gets all names of files which are stored in the S3 bucket with the provided name.
-
-**Notice**: If you provide bucket and folder (as an example `eio-dev/inbound`), not only all names of files will be returned but the name of the root folder (`inbound/`) as well.
-
-#### Configuration Fields
-
-* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to read file from (by default, if `bucketName` is not provided in metadata).
-
-#### Input Metadata
-
-* **bucketName** (string, optional) – Name of S3 bucket to read file from (will replace `Default Bucket Name and folder` if provided).
-
-<details> 
-<summary>Input metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "bucketName": {
-      "type": "string",
-      "required": false
-    }
-  }
-}
-```
-</details>
-
-#### Output Metadata
-
-<details> 
-<summary>Output metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "ETag": {
-      "type": "string",
-      "required": true
-    },
-    "Location": {
-      "type": "string",
-      "required": false
-    },
-    "Key": {
-      "type": "string",
-      "required": true
-    },
-    "Bucket": {
-      "type": "string",
-      "required": true
-    }
-  }
-}
-```
-</details>
-
-#### Known Limitations
-
-A maximum of 1000 file names can be retrieved.
-
-### Delete file
-
-Removes a file from an S3 bucket by the provided name in the selected bucket. The action will emit the single filename of the removed file.
-
-#### Configuration Fields
-
-* **Default Bucket Name and folder** (string, required) – Name of S3 bucket to delete file from (by default, if `bucketName` is not provided).
-
-#### Input Metadata
-
-* **filename** (string, required) – Name of the file in the S3 bucket to delete.
-* **bucketName** (string, optional) – Name of S3 bucket and folder to delete file from (will replace `Default Bucket Name and folder` if provided).
-
-<details> 
-<summary>Input metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "filename": {
-      "type": "string",
-      "required": true
-    },
-    "bucketName": {
-      "type": "string",
-      "required": false
-    }
-  }
-}
-```
-</details>
-
-#### Output Metadata
-
-<details> 
-<summary>Output metadata</summary>
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "filename": {
-      "type": "string",
-      "required": true
-    }
-  }
-}
-```
 </details>
 
 ### Rename file
@@ -456,9 +474,46 @@ None.
 ```
 </details>
 
+### Write File to S3 From a Provided Attachment
+
+Given a filename and a URL to an attachment stored in the platform, transfers the contents of the attachment to AWS S3. The component returns a summary of the written file. AWS S3 always overwrites the contents of the file if it already exists.
+
+#### Configuration Fields
+
+None.
+
+#### Input Metadata
+
+* **bucketName** (string, required) – Name of S3 bucket to write the file to. Sufficient write permission is required.
+* **fileName** (string, required) – Name of the file/S3 object to write. Use `/` characters in the filename to create folders.
+* **attachmentUrl** (string, required) – URL to the attachment stored in the platform. The contents of this attachment will be written to S3 without any transformation.
+
+#### Output Metadata
+
+Returns a summary object with the following properties:
+
+* **ETag** (string, required) – Entity tag for the uploaded object.
+* **Location** (string, optional) – URL of the uploaded object.
+* **Key** (string, required) – Key (filename) of the uploaded object.
+* **Bucket** (string, required) – Name of the bucket where the file was written.
+
+#### Limitations
+
+* It is not possible to set file or object metadata in S3.
+* Files/Objects cannot be larger than the memory available in the component's docker container.
+* Files/Objects cannot be more than 5 GB in size.
+* It is not possible to set the AWS S3 Storage Class for written files/objects. They will always be written with the `standard` storage class.
+* It is not possible to set file/object tags.
+* It is not possible to compress objects/files (with zip, gzip, etc.).
+* It is not possible to encrypt objects/files.
+
 ## Deprecated Actions
 
 The following actions are deprecated and should not be used in new integrations. They are maintained for backward compatibility with existing flows.
+
+### Stream to CSV
+
+⚠️ **Deprecated**. Use the CSV or batch component to create a CSV file first, then write that file to S3 using the [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment) action.
 
 ### Write file
 
@@ -526,10 +581,6 @@ Puts a stream as a file into an S3 bucket. This action creates or rewrites a new
 }
 ```
 </details>
-
-### Stream to CSV
-
-⚠️ **Deprecated**. Use the CSV or batch component to create a CSV file first, then write that file to S3 using the [`Write File to S3 From a Provided Attachment`](#write-file-to-s3-from-a-provided-attachment) action.
 
 ## Known Limitations
 

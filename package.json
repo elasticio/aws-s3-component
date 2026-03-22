@@ -34,7 +34,7 @@
     "@elastic.io/component-commons-library": "4.0.0",
     "csv": "5.3.2",
     "csv-stringify": "6.5.1",
-    "elasticio-sailor-nodejs": "2.7.7",
+    "elasticio-sailor-nodejs": "2.7.8",
     "iconv-lite": "0.5.1",
     "lodash": "4.17.21",
     "mime-types": "2.1.27",

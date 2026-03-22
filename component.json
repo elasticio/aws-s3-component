@@ -1,6 +1,6 @@
 {
   "title": "AWS S3",
-  "version": "1.6.0",
+  "version": "1.7.0-dev.2",
   "description": "Integration component that can read and write to AWS S3",
   "docsUrl": "https://github.com/elasticio/amazon-s3-component",
   "credentials": {
@@ -448,6 +448,47 @@
       },
       "fields": {},
       "dynamicMetadata": true
+    },
+    "listObjects": {
+      "title": "List S3 Objects",
+      "help": {
+        "description": "List S3 Objects",
+        "link": "/components/aws-s3/index.html#list-s3-objects"
+      },
+      "main": "./lib/actions/listObjects.js",
+      "fields": {
+        "bucketName": {
+          "viewClass": "TextFieldView",
+          "label": "Bucket Name and Folder",
+          "placeholder": "my-bucket/my-folder",
+          "required": true
+        }
+      },
+      "metadata": {
+        "in": {
+          "type": "object",
+          "properties": {
+            "keyRegex": {
+              "title": "Search pattern",
+              "type": "string",
+              "required": true
+            }
+          }
+        },
+        "out": {
+          "type": "object",
+          "properties": {
+            "Key": {
+              "type": "string",
+              "required": true
+            },
+            "SignedUrl": {
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      }
     }
   }
 }
