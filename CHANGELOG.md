@@ -1,3 +1,7 @@
+# 1.7.0 (March 22, 2026)
+* Add List S3 Objects action
+* Update `Sailor` version to 2.7.8
+
 # 1.6.0 (January 21, 2026)
 
 * Add support for pre-signed URLs in "Read file" action and "Get New and Updated S3 Objects" trigger
